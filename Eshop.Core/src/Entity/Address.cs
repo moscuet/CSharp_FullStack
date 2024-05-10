@@ -1,39 +1,48 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ecommerce.Core.src.Entity
+namespace Ecommerce.Core.Entities
 {
     [Table("addresses")]
     public class Address : BaseEntity
     {
         [Required]
+        [ForeignKey("User")]
         public Guid UserId { get; set; }
 
         [Required]
-        public string AddressLine { get; set; }
+        [MaxLength(100)] 
+        public string Street { get; set; }
+
+        [Required]
+        [MaxLength(100)] 
+        public string House { get; set; }
 
         [Required]
         [MaxLength(20)]
-        public string PostalCode { get; set; }
+        public string ZipCode { get; set; }
 
         [Required]
-        [MaxLength(128)]
+        [MaxLength(50)] 
         public string Country { get; set; }
 
-        [MaxLength(40)]
+        [Phone]
+        [MaxLength(20)]
         public string PhoneNumber { get; set; }
 
-        // Navigation property
-        [ForeignKey("UserId")]
+        // Navigation property to the User
         public User User { get; set; }
 
+        // Default constructor for EF Core
         public Address() { }
 
-        public Address(Guid userId, string addressLine, string postalCode, string country, string phoneNumber)
+        public Address(Guid userId, string street, string house, string zipCode, string country, string phoneNumber)
         {
             UserId = userId;
-            AddressLine = addressLine;
-            PostalCode = postalCode;
+            Street = street;
+            House = house;
+            ZipCode = zipCode;
             Country = country;
             PhoneNumber = phoneNumber;
         }
