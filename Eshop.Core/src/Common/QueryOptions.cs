@@ -1,7 +1,7 @@
 
-using Ecommerce.Core.src.ValueObject;
+using Eshop.Core.src.ValueObject;
 
-namespace Ecommerce.Core.src.Common
+namespace Eshop.Core.src.Common
 {
     public class QueryOptions
     {

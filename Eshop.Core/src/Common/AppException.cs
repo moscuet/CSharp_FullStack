@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace Ecommerce.Core.src.Common
+namespace Eshop.Core.src.Common
 {
     public class AppException : Exception
     {

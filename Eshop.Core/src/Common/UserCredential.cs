@@ -1,4 +1,4 @@
-namespace Ecommerce.Core.src.Common
+namespace Eshop.Core.src.Common
 {
     public class UserCredential
     {
