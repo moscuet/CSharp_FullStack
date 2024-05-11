@@ -1,50 +1,42 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ecommerce.Core.src.Entity
+namespace Eshop.Core.src.Entity
 {
     [Table("products")]
     public class Product : BaseEntity
     {
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; }
+
+        [Required, MaxLength(1080)]
+        public string Description { get; set; }
+
+        [Required]
+        [DecimalPrecision(2)]
+        [Range(0, 9999999.99, ErrorMessage = "Price must be greater than or equal to 0 and lesss than equal 9999999.99")]
+        public decimal Price { get; set; }
+
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Inventory must not be negative number")]
+        public int Inventory { get; set; }
 
 
-        // Constructor with parameters
-        public Product(string name, string description, Category category, decimal price, int inventory)
+        // Navigation property 
+        public ICollection<Category> Categories { get; set; } = new List<Category>();
+        public ICollection<Image> Images { get; set; } = new List<Image>();
+
+
+        public Product(string name, string description, decimal price, int inventory)
         {
             Name = name;
             Description = description;
             Price = price;
             Inventory = inventory;
-            Category = category;
         }
 
         // Parameterless constructor for Entity Framework Core
         public Product() { }
-
-
-
-        [Required]
-        [MaxLength(255)]
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        [Required]
-        [Range(0, 9999999.99, ErrorMessage = "Price must be greater than or equal to 0")]
-        public decimal Price { get; set; }
-        public Guid? CategoryId { get; set; }
-        [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "Inventory must be greater than or equal to 0")]
-        public int Inventory { get; set; }
-
-        public List<Image> Images { get; set; } = new List<Image>();
-
-        [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
-
-        public void SetProductImages(List<Image> images)
-        {
-            Images = images;
-        }
-
     }
 }

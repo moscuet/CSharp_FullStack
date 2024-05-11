@@ -1,21 +1,30 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Eshop.Core.src.ValueObject;
 
-namespace Ecommerce.Core.src.Entity
+namespace Eshop.Core.src.Entity
 {
     [Table("images")]
     public class Image : BaseEntity
     {
-        public Guid EntityId { get; set; }
+        [Required]
+       public Guid EntityId { get; private set; }
 
+        [Required]
+        [EnumDataType(typeof(EntityType))]
+        public EntityType EntityType { get; set; }
+
+        [Required]
+        [Url]
+        [MaxLength(2048)]
         public string Url { get; set; }
 
-        // Add a parameterless constructor for Entity Framework
-        public Image() { }
+        private Image() { }
 
-        public Image(Guid entityId, string url)
+        public Image(Guid entityId, EntityType entityType, string url)
         {
             EntityId = entityId;
+            EntityType = entityType;
             Url = url;
         }
     }

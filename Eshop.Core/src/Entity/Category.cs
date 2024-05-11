@@ -1,16 +1,27 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Ecommerce.Core.src.Common;
+using Eshop.Core.src.Common;
 
-namespace Ecommerce.Core.src.Entity
+namespace Eshop.Core.src.Entity
 {
     [Table("categories")]
     public class Category : BaseEntity
     {
-        [MaxLength(255)]
         [Required]
+        [MaxLength(128)]
         public string Name { get; set; }
+
+        public Guid? ParentId { get; set; }
+
+        [Required]
+        [Url]
         public string Image { get; set; } = AppConstants.CATEGORY_DEFAULT_IMAGE;
+
+       [ForeignKey("ParentId")]
+        public virtual Category Parent { get; set; }
+
+        public virtual ICollection<Category> Children { get; set; } = new List<Category>();
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
         public Category() { }
         public Category(string name, string image)
@@ -19,6 +30,4 @@ namespace Ecommerce.Core.src.Entity
             Image = image;
         }
     }
-
-
 }

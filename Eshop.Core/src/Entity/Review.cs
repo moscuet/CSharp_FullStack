@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Ecommerce.Core.src.Entity;
+using Eshop.Core.src.Entity;
 
 [Table("reviews")]
 public class Review : BaseEntity
@@ -9,34 +9,22 @@ public class Review : BaseEntity
     public Review() { }
 
     [Required]
-    public Guid UserId { get; set; }
+    public Guid UserId { get; private set; }
 
     [Required]
-    public Guid ProductId { get; set; }
-
-
-    [Required]
-    public bool IsAnonymous { get; set; }
+    public Guid ProductId { get; private set; }
 
     [Required]
-    [MaxLength(1000)]
-    public string Content { get; set; }
-    private int _rating;
+    [MaxLength(1080)]
+    public string Comment { get; set; }
 
     [Required]
     [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
-    public int Rating
-    {
-        get => _rating;
-        set
-        {
-            if (value < 1 || value > 5)
-            {
-                throw new ArgumentOutOfRangeException("Rating must be between 1 and 5.");
-            }
-            _rating = value;
-        }
-    }
+    public int Rating { get; set; }
+
+    [Required]
+    public bool IsAnonymous { get; set; } = false; 
+
     public List<Image> Images { get; set; } = new List<Image>();
 
     [ForeignKey("ProductId")]
@@ -44,13 +32,12 @@ public class Review : BaseEntity
 
     [ForeignKey("UserId")]
     public User User { get; }
-
-    public Review(Guid userId, Guid productId, bool isAnonymous, string content, int rating)
-    {
-        UserId = userId;
-        ProductId = productId;
-        IsAnonymous = isAnonymous;
-        Content = content;
-        Rating = rating;
-    }
+ public Review(Guid userId, Guid productId, int rating, string comment, bool isAnonymous)
+        {
+            UserId = userId;
+            ProductId = productId;
+            Rating = rating;
+            Comment = comment;
+            IsAnonymous = isAnonymous;
+        }
 }

@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ecommerce.Core.src.Entity
+namespace Eshop.Core.src.Entity
 {
     public class BaseEntity
     {
