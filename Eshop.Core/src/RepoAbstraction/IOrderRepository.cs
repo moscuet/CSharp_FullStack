@@ -1,7 +1,7 @@
-using Ecommerce.Core.src.Common;
-using Ecommerce.Core.src.Entity;
+using Eshop.Core.src.Common;
+using Eshop.Core.src.Entity;
 
-namespace Ecommerce.Core.src.RepositoryAbstraction
+namespace Eshop.Core.src.RepositoryAbstraction
 {
   public interface IOrderRepository
     {

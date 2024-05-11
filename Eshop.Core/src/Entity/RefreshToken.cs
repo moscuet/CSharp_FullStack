@@ -1,4 +1,4 @@
-namespace Ecommerce.Core.src.Entity
+namespace Eshop.Core.src.Entity
 {
     public class RefreshToken:BaseEntity
     {

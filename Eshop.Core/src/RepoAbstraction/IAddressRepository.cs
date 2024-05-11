@@ -1,7 +1,8 @@
-using Ecommerce.Core.src.Common;
-using Ecommerce.Core.src.Entity;
 
-namespace Ecommerce.Core.src.RepositoryAbstraction
+
+using Eshop.Core.src.Entity;
+
+namespace Eshop.Core.src.RepositoryAbstraction
 {
     public interface IAddressRepository
     {

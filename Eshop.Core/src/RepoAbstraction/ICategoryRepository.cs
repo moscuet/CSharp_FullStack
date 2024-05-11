@@ -1,6 +1,6 @@
-using Ecommerce.Core.src.Entity;
+using Eshop.Core.src.Entity;
 
-namespace Ecommerce.Core.src.RepositoryAbstraction
+namespace Eshop.Core.src.RepositoryAbstraction
 {
     public interface ICategoryRepository
     {

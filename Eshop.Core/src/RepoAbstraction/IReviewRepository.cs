@@ -1,6 +1,6 @@
-using Ecommerce.Core.src.Common;
+using Eshop.Core.src.Common;
 
-namespace Ecommerce.Core.src.RepoAbstraction
+namespace Eshop.Core.src.RepoAbstraction
 {
     public interface IReviewRepository
     {

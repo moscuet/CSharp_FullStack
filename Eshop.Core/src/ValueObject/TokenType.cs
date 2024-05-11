@@ -1,4 +1,4 @@
-namespace Ecommerce.Core.src.ValueObject
+namespace Eshop.Core.src.ValueObject
 {
     public enum TokenType
     {
