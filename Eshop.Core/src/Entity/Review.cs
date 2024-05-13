@@ -21,12 +21,27 @@ public class Review : BaseEntity
     [Required]
     public bool IsAnonymous { get; set; } = false; 
 
-    public List<Image> Images { get; set; } = new List<Image>();
 
     [ForeignKey("ProductId")]
     public Product product { get; }
 
     [ForeignKey("UserId")]
     public User User { get; }
+
+     public List<Image> Images { get; private set; } = new List<Image>();
+
+        public void AddImage(Image image)
+        {
+            Images.Add(image);
+        }
+
+        public void RemoveImage(Guid imageId)
+        {
+            var image = Images.FirstOrDefault(i => i.Id == imageId);
+            if (image != null)
+            {
+                Images.Remove(image);
+            }
+        }
 }
 

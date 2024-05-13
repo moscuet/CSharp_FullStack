@@ -10,15 +10,18 @@ namespace Eshop.Core.src.Entity
         [Required, MaxLength(128)]
         public string Name { get; set; }
 
-        public Guid? ParentId { get; set; }
+        public Guid? ParentCategoryId { get; set; }
 
         [Required, Url]
-        public string Image_Url  { get; set; } = AppConstants.CATEGORY_DEFAULT_IMAGE;
+        public string Image_Url { get; set; } = AppConstants.CATEGORY_DEFAULT_IMAGE;
 
-       [ForeignKey("ParentId")]
-        public virtual Category Parent { get; set; }
+        [ForeignKey("ParentId")]
+        public virtual Category ParentCategory { get; set; }
 
-        public virtual ICollection<Category> Children { get; set; } = new List<Category>();
-        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+        // Children collection to handle nested categories
+        public List<Category> SubCategories { get; set; } = new List<Category>();
+
+        public virtual List<Product> Products { get; set; } = new List<Product>();
+
     }
 }

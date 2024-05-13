@@ -36,6 +36,21 @@ namespace Eshop.Core.src.Entity
         [Required, MaxLength(2048)]
         public string Avatar { get; set; } = AppConstants.AVATAR_DEFAULT_IMAGE;
 
-        public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
+        public virtual List<Address> Addresses { get; set; } = new List<Address>();
+
+
+        public void AddAddress(Address address)
+        {
+            Addresses.Add(address);
+        }
+
+        public void RemoveAddress(Guid addressId)
+        {
+            var address = Addresses.FirstOrDefault(a => a.Id == addressId);
+            if (address != null)
+            {
+                Addresses.Remove(address);
+            }
+        }
     }
 }

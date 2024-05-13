@@ -12,4 +12,7 @@ namespace Eshop.Core.src.Common
         public string? SearchKey { get; set; } = string.Empty; 
         
     }
+    
 }
+
+
