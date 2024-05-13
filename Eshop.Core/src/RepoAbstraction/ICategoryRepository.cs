@@ -2,14 +2,8 @@ using Eshop.Core.src.Entity;
 
 namespace Eshop.Core.src.RepositoryAbstraction
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IBaseRepository<Category>
     {
-        Task<Category> CreateCategoryAsync(Category category);
-        Task<bool> UpdateCategoryAsync(Guid id, Category category);
-        Task<Category> GetCategoryByIdAsync(Guid categoryId);
-        Task<IEnumerable<Category>> GetAllCategoriesAsync();
-        Task<bool> DeleteCategoryAsync(Guid categoryId);
         Task<Category> FindByNameAsync(string name);
     }
-
 }

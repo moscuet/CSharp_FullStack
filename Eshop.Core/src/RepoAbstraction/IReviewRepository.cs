@@ -1,14 +1,9 @@
 using Eshop.Core.src.Common;
 
-namespace Eshop.Core.src.RepoAbstraction
+namespace Eshop.Core.src.RepositoryAbstraction
 {
-    public interface IReviewRepository
+    public interface IReviewRepository : IBaseRepository<Review>
     {
-        Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions options);
-        Task<Review> GetReviewByIdAsync(Guid id);
-        Task<Review> CreateReviewAsync(Review review);
-        Task<bool> UpdateReviewByIdAsync(Review review);
-        Task<bool> DeleteReviewByIdAsync(Guid id);
         Task<IEnumerable<Review>> GetReviewsByProductIdAsync(Guid productId);
         Task<IEnumerable<Review>> GetReviewsByUserIdAsync(Guid userId);
     }
