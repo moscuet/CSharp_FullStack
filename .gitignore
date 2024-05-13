@@ -103,5 +103,4 @@ frontend/package-*.json
 
 
 # temporary 
-Scripts.sql
-
+temp/*

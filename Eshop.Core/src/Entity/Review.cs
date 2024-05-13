@@ -6,20 +6,16 @@ using Eshop.Core.src.Entity;
 [Table("reviews")]
 public class Review : BaseEntity
 {
-    public Review() { }
-
     [Required]
     public Guid UserId { get; private set; }
 
     [Required]
     public Guid ProductId { get; private set; }
 
-    [Required]
-    [MaxLength(1080)]
+    [Required, MaxLength(1080)]
     public string Comment { get; set; }
 
-    [Required]
-    [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
+    [Required, Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
     public int Rating { get; set; }
 
     [Required]
@@ -32,12 +28,5 @@ public class Review : BaseEntity
 
     [ForeignKey("UserId")]
     public User User { get; }
- public Review(Guid userId, Guid productId, int rating, string comment, bool isAnonymous)
-        {
-            UserId = userId;
-            ProductId = productId;
-            Rating = rating;
-            Comment = comment;
-            IsAnonymous = isAnonymous;
-        }
 }
+

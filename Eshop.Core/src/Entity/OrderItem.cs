@@ -9,14 +9,12 @@ namespace Eshop.Core.src.Entity
         public Guid? ProductId { get; set; }
 
         [Required]
-        public Guid OrderId { get; set; } // some how OrderId create a conflic when trying to craete tables using Fluent API
+        public Guid OrderId { get; set; } 
 
-        [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0")]
+        [Required, Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0")]
         public int Quantity { get; set; }
 
-        [Required]
-        [Range(0.01, 999999.99, ErrorMessage = "Price must be greater than 0.00")]
+        [Required, Range(0.01, 999999.99, ErrorMessage = "Price must be greater than 0.00")]
         public decimal Price { get; set; }
 
         [ForeignKey("OrderId")]
@@ -24,7 +22,7 @@ namespace Eshop.Core.src.Entity
 
         [ForeignKey("ProductId")]
         public Product? Product { get; set; }
-        public OrderItem() { }// this is needed so DbContext can run
+        public OrderItem() { }
         public OrderItem(Guid? productId, Guid orderId, int quantity, decimal price)
         {
             ProductId = productId;

@@ -7,49 +7,29 @@ namespace Eshop.Core.src.Entity
     [Table("addresses")]
     public class Address : BaseEntity
     {
-        [Required]
-        [ForeignKey("User")]
+        [Required, ForeignKey("User")]
         public Guid UserId { get; set; }
 
-        [Required]
-        [MaxLength(100)]
+        [Required, MaxLength(100)]
         public string Street { get; set; }
 
-        [Required]
-        [MaxLength(100)]
+        [Required, MaxLength(100)]
         public string House { get; set; }
 
-        [Required]
-        [MaxLength(50)]
+        [Required, MaxLength(50)]
         public string City { get; set; }
 
-        [Required]
-        [MaxLength(20)]
+        [Required, MaxLength(20)]
         public string ZipCode { get; set; }
 
-        [Required]
-        [MaxLength(50)]
+        [Required, MaxLength(50)]
         public string Country { get; set; }
 
-        [Phone]
-        [MaxLength(20)]
+        [Required, Phone, MaxLength(20)]
         public string PhoneNumber { get; set; }
 
         // Navigation property to the User
         public User User { get; set; }
 
-        // Default constructor for EF Core
-        public Address() { }
-
-        public Address(Guid userId, string street, string house, string city, string zipCode, string country, string phoneNumber)
-        {
-            UserId = userId;
-            Street = street;
-            House = house;
-            City = city;
-            ZipCode = zipCode;
-            Country = country;
-            PhoneNumber = phoneNumber;
-        }
     }
 }

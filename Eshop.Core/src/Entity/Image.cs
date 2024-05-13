@@ -10,22 +10,10 @@ namespace Eshop.Core.src.Entity
         [Required]
        public Guid EntityId { get; private set; }
 
-        [Required]
-        [EnumDataType(typeof(EntityType))]
+        [Required, EnumDataType(typeof(EntityType))]
         public EntityType EntityType { get; set; }
 
-        [Required]
-        [Url]
-        [MaxLength(2048)]
+        [Required, Url, MaxLength(2048)]
         public string Url { get; set; }
-
-        private Image() { }
-
-        public Image(Guid entityId, EntityType entityType, string url)
-        {
-            EntityId = entityId;
-            EntityType = entityType;
-            Url = url;
-        }
     }
 }
