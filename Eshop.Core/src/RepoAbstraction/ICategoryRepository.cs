@@ -6,7 +6,5 @@ namespace Eshop.Core.src.RepositoryAbstraction
     {
         Task<Category> FindByNameAsync(string name);
         Task<IEnumerable<Category>> GetAllAsync();
-
-        
     }
 }

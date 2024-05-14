@@ -7,6 +7,6 @@ namespace Eshop.Core.src.RepositoryAbstraction
         Task<TEntity> CreateAsync(TEntity entity);
         Task<bool> UpdateAsync(TEntity entity);
         Task<TEntity> GetByIdAsync(Guid id);
-        Task<bool> DeleteAsync(Guid id);
+        Task<bool> DeleteByIdAsync(Guid id);
     }
 }

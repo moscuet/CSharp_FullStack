@@ -33,7 +33,7 @@ namespace Eshop.Core.src.Entity
         [Required, InternationalPhoneNumber, MaxLength(20)]
         public string PhoneNumber { get; set; }
 
-        [Required, MaxLength(2048)]
+        [MaxLength(2048)]
         public string Avatar { get; set; } = AppConstants.AVATAR_DEFAULT_IMAGE;
 
         public virtual List<Address> Addresses { get; set; } = new List<Address>();
