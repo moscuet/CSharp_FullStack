@@ -39,9 +39,6 @@ using Eshop.Service.src.DTO;
         CreateMap<ReviewCreateDTO, Review>();
         CreateMap<ReviewUpdateDTO, Review>();
 
-        // Wishlist mappings
-        CreateMap<Wishlist, WishlistReadDTO>();
-        CreateMap<WishlistCreateDTO, Wishlist>();
     }
 }
 
