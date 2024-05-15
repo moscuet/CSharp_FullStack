@@ -7,9 +7,11 @@ using Eshop.Service.src.DTO;
     public MappingProfile()
     {
         // User mappings
+        CreateMap<UserUpdateDTO, User>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
         CreateMap<User, UserReadDTO>();
         CreateMap<UserCreateDTO, User>();
-        CreateMap<UserUpdateDTO, User>();
 
         // Address mappings
         CreateMap<Address, AddressReadDTO>();
