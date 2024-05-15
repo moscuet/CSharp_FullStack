@@ -18,7 +18,7 @@ namespace Eshop.Core.src.Entity
         [Required, EmailAddress, MaxLength(100)]
         public string Email { get; set; }
 
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string Password { get; set; }
 
         [Required]
@@ -28,7 +28,7 @@ namespace Eshop.Core.src.Entity
         public DateOnly DateOfBirth { get; set; }
 
         [Required]
-        public UserRole Role { get; set; }
+        public UserRole UserRole { get; set; } = UserRole.User;
 
         [Required, InternationalPhoneNumber, MaxLength(20)]
         public string PhoneNumber { get; set; }
