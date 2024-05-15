@@ -7,49 +7,44 @@ namespace Eshop.Core.src.Common
         public HttpStatusCode StatusCode { get; set; }
         public string ErrorMessage { get; set; }
 
-        public AppException(HttpStatusCode statusCode, string message)
+        public AppException(HttpStatusCode statusCode, string message) : base(message)
         {
             StatusCode = statusCode;
             ErrorMessage = message;
         }
 
-        // Bad Request
-        public static AppException BadRequest(string message = "Bad Request")
-        {
-            return new AppException(HttpStatusCode.BadRequest, message);
-        }
 
-        // Unauthorized
-        public static AppException Unauthorized(string message = "Unauthorized Access")
-        {
-            return new AppException(HttpStatusCode.Unauthorized, message);
-        }
-
-        // Forbidden
-        public static AppException Forbidden(string message = "Forbidden Access")
-        {
-            return new AppException(HttpStatusCode.Forbidden, message);
-        }
-
-        // Not Found
         public static AppException NotFound(string message = "Resource Not Found")
         {
             return new AppException(HttpStatusCode.NotFound, message);
         }
 
-        // Conflict (e.g., duplicate data)
+        // Predefined exceptions
+        public static AppException BadRequest(string message = "Bad Request")
+        {
+            return new AppException(HttpStatusCode.BadRequest, message);
+        }
+
+        public static AppException Unauthorized(string message = "Unauthorized Access")
+        {
+            return new AppException(HttpStatusCode.Unauthorized, message);
+        }
+
+        public static AppException Forbidden(string message = "Forbidden Access")
+        {
+            return new AppException(HttpStatusCode.Forbidden, message);
+        }
+
         public static AppException Conflict(string message = "Conflict")
         {
             return new AppException(HttpStatusCode.Conflict, message);
         }
 
-        // Unprocessable Entity (e.g., validation errors)
         public static AppException UnprocessableEntity(string message = "Unprocessable Entity")
         {
             return new AppException(HttpStatusCode.UnprocessableEntity, message);
         }
 
-        // Internal Server Error
         public static AppException InternalServerError(string message = "Internal Server Error")
         {
             return new AppException(HttpStatusCode.InternalServerError, message);

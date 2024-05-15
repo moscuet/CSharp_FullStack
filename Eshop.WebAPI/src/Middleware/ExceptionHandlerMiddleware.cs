@@ -24,7 +24,13 @@ namespace Eshop.WebApi.src.middleware
                 _logger.LogError(dbEx, "Database update error occurred.");
 
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = "A database error occurred. Please check your input or try again later." };
+              
+                var errorMessage = new
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = $"A database error occurred: {dbEx.InnerException?.Message ?? dbEx.Message}. Please check your input or try again later."
+                };
+
                 await context.Response.WriteAsJsonAsync(errorMessage);
             }
             catch (AppException appEx)
@@ -37,10 +43,10 @@ namespace Eshop.WebApi.src.middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred.");
+                _logger.LogError(ex, "An unexpected error occurredd.");
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = "An unexpected error occurred. Please try again later." };
+                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = "An unexpected error occurred. Please try again laterr." };
                 await context.Response.WriteAsJsonAsync(errorMessage);
             }
         }
