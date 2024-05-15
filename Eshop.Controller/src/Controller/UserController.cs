@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Eshop.Core.src.Common;
-using Eshop.Service.src.ServiceAbstraction;
-using System.Security.Claims;
 using Eshop.Service.src.DTO;
+using Eshop.Service.src.ServiceAbstraction;
+using Eshop.Core.src.Common;
+using System.Text.Json;
 
-namespace WebDemo.Controller.src.Controller
+namespace Eshop.Controller.src.Controller
 {
     [ApiController]
     [Route("api/v1/users")]
@@ -18,37 +17,54 @@ namespace WebDemo.Controller.src.Controller
             _userService = userService;
         }
 
-        //[Authorize(Roles ="Admin")]// authentication middleware would be invoked if user send get request to this endpoint
-        [HttpGet("")] // define endpoint: /users?page=1&pageSize=10
-        public async Task<IEnumerable<UserReadDTO>> GetAllUsersAsync([FromQuery] QueryOptions options)
+        // POST: api/v1/users
+        [HttpPost]
+        public async Task<ActionResult<UserReadDTO>> CreateUserAsync([FromBody] UserCreateDTO userDTO)
         {
-            try
-            {
-                return await _userService.GetAllUsersAsync(options);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        
-        // only admin can get user profile by id
-        //[Authorize(Roles ="Admin")]
-        [HttpGet("{id}")] // define endpoint: /users/{id}
-        public async Task<UserReadDTO> GetUserByIdAsync([FromRoute] Guid id)
-        {
-            return await _userService.GetUserByIdAsync(id);
+            Console.WriteLine($"Received role: {userDTO.UserRole}");  // Check received role
+            var createdUser = await _userService.CreateUserAsync(userDTO);
+            return Ok(createdUser);
         }
 
-        // user needs to be logged in to check her own profile
-       // [Authorize]
-        [HttpGet("profile")]
-        public async Task<UserReadDTO> GetUserProfileAsync()
+        // GET: api/v1/users/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserReadDTO>> GetUserByIdAsync(Guid id)
         {
-            var claims = HttpContext.User; // not user obbject, but user claims
-            var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _userService.GetUserByIdAsync(id);
 
-            return await _userService.GetUserByIdAsync(userId);
+            return Ok(user);
+        }
+
+        // GET: api/v1/users
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserReadDTO>>> GetAllUsersAsync([FromQuery] QueryOptions options)
+        {
+            var users = await _userService.GetAllUsersAsync(options);
+            return Ok(users);
+        }
+
+        // PUT: api/v1/users/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUserAsync(Guid id, [FromBody] UserUpdateDTO userDTO)
+        {
+            bool updateResult = await _userService.UpdateUserByIdAsync(id, userDTO);
+            if (!updateResult)
+            {
+                return NotFound("User not found.");
+            }
+            return NoContent();
+        }
+
+        // DELETE: api/v1/users/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUserAsync(Guid id)
+        {
+            bool deleteResult = await _userService.DeleteUserByIdAsync(id);
+            if (!deleteResult)
+            {
+                return NotFound("User not found.");
+            }
+            return NoContent();
         }
     }
 }
