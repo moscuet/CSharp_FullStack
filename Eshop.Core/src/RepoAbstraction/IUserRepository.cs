@@ -8,5 +8,6 @@ namespace Eshop.Core.src.RepoAbstraction
         Task<User> GetUserByCredentialAsync(UserCredential credential);
         Task<IEnumerable<User>> GetAllUsersAsync(QueryOptions options);
         Task<bool> UserExistsByEmailAsync(string email);
+        Task<User?> GetUserByEmailAsync(string email);
     }
 }
