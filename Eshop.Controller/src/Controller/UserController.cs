@@ -21,10 +21,10 @@ namespace Eshop.Controller.src.Controller
 
         // Register user
         [HttpPost("register")]
-        public async Task<ActionResult<UserReadDTO>> CreateUserAsync([FromBody] UserCreateDTO userDTO)
+        public async Task<ActionResult<UserReadDTO>> CreateAsync([FromBody] UserCreateDTO userDTO)
         {
             userDTO.UserRole = UserRole.User;
-            var createdUser = await _userService.CreateUserAsync(userDTO);
+            var createdUser = await _userService.CreateAsync(userDTO);
             return Ok(createdUser);
         }
 
@@ -35,7 +35,7 @@ namespace Eshop.Controller.src.Controller
         {
             var claims = HttpContext.User;
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var user = await _userService.GetUserProfileAsync(userId);
+            var user = await _userService.GetByIdAsync(userId);
             return Ok(user);
         }
 
@@ -46,7 +46,7 @@ namespace Eshop.Controller.src.Controller
         {
             var claims = HttpContext.User;
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
-            bool updateResult = await _userService.UpdateUserByIdAsync(userId, userDTO);
+            bool updateResult = await _userService.UpdateAsync(userId, userDTO);
             if (!updateResult)
             {
                 return NotFound("User not found.");
@@ -61,7 +61,7 @@ namespace Eshop.Controller.src.Controller
         {
             var claims = HttpContext.User;
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
-            bool deleteResult = await _userService.DeleteUserByIdAsync(userId);
+            bool deleteResult = await _userService.DeleteByIdAsync(userId);
             if (!deleteResult)
             {
                 return NotFound("User not found.");
@@ -74,7 +74,7 @@ namespace Eshop.Controller.src.Controller
         [HttpGet("{id}")]
         public async Task<ActionResult<UserReadDTO>> GetUserByIdAsync(Guid id)
         {
-            var user = await _userService.GetUserProfileAsync(id);
+            var user = await _userService.GetByIdAsync(id);
             return Ok(user);
         }
 
@@ -94,7 +94,7 @@ namespace Eshop.Controller.src.Controller
         public async Task<ActionResult<UserReadDTO>> CreateAdminAsync([FromBody] UserCreateDTO userCreateDTO)
         {
             userCreateDTO.UserRole = UserRole.Admin;
-            var createdUser = await _userService.CreateUserAsync(userCreateDTO);
+            var createdUser = await _userService.CreateAsync(userCreateDTO);
             return Ok(createdUser);
         }
 
@@ -103,7 +103,7 @@ namespace Eshop.Controller.src.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserAsync(Guid id)
         {
-            bool deleteResult = await _userService.DeleteUserByIdAsync(id);
+            bool deleteResult = await _userService.DeleteByIdAsync(id);
             if (!deleteResult)
             {
                 return NotFound("User not found.");

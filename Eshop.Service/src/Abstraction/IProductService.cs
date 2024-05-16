@@ -3,12 +3,8 @@ using Eshop.Core.src.Common;
 
 namespace Eshop.Service.src.ServiceAbstraction
 {
-    public interface IProductService
+    public interface IProductService : IBaseService<ProductCreateDTO, ProductUpdateDTO, ProductReadDTO>
     {
-        Task<ProductReadDTO> CreateProductAsync(ProductCreateDTO product);
-        Task<bool> UpdateProductByIdAsync(Guid id,ProductUpdateDTO product);
-        Task<ProductReadDTO> GetProductByIdAsync(Guid id);
         Task<IEnumerable<ProductReadDTO>> GetAllProductsAsync(QueryOptions? options);
-        Task<bool> DeleteProductByIdAsync(Guid id);
     }
 }

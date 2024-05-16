@@ -1,6 +1,4 @@
 using AutoMapper;
-using System.Net;
-using System.Text.Json;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.Entity;
 using Eshop.Core.src.RepoAbstraction;
@@ -23,7 +21,7 @@ namespace Eshop.Service.src.Service
             _passwordService = passwordService;
         }
 
-        public async Task<UserReadDTO> CreateUserAsync(UserCreateDTO userDTO)
+        public async Task<UserReadDTO> CreateAsync(UserCreateDTO userDTO)
         {
             UserValidation.ValidateUserCreateDTO(userDTO);
 
@@ -42,7 +40,7 @@ namespace Eshop.Service.src.Service
             return _mapper.Map<UserReadDTO>(createdUser);
         }
 
-        public async Task<UserReadDTO> GetUserProfileAsync(Guid id)
+        public async Task<UserReadDTO> GetByIdAsync(Guid id)
         {
             var user = await _userRepo.GetByIdAsync(id);
             if (user == null)
@@ -52,7 +50,7 @@ namespace Eshop.Service.src.Service
             return _mapper.Map<UserReadDTO>(user);
         }
 
-        public async Task<bool> DeleteUserByIdAsync(Guid id)
+        public async Task<bool> DeleteByIdAsync(Guid id)
         {
             var existingUser = await _userRepo.GetByIdAsync(id);
             if (existingUser == null)
@@ -69,7 +67,7 @@ namespace Eshop.Service.src.Service
             return _mapper.Map<IEnumerable<UserReadDTO>>(users);
         }
 
-        public async Task<bool> UpdateUserByIdAsync(Guid id, UserUpdateDTO userDTO)
+        public async Task<bool> UpdateAsync(Guid id, UserUpdateDTO userDTO)
         {
             var existingUser = await _userRepo.GetByIdAsync(id);
             if (existingUser == null)

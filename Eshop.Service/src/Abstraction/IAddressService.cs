@@ -5,10 +5,8 @@ namespace Eshop.Service.src.ServiceAbstraction
 {
     public interface IAddressService
     {
-        Task<AddressReadDTO> CreateAddressAsync(AddressCreateDTO address);
-        Task<bool> UpdateAddressByIdAsync(Guid id, AddressUpdateDTO address);
-        Task<AddressReadDTO> GetAddressByIdAsync(Guid id);
+        public interface IAddressService : IBaseService<AddressCreateDTO, AddressUpdateDTO, AddressReadDTO>
+    {
         Task<IEnumerable<AddressReadDTO>> GetAllUserAddressesAsync(Guid userId);
-        Task<bool> DeleteAddressByIdAsync(Guid id);
-    }
+    }  }
 }
