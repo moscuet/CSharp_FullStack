@@ -8,7 +8,13 @@ using Eshop.Service.src.DTO;
     {
         // User mappings
         CreateMap<UserUpdateDTO, User>()
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            .ForMember(dest => dest.FirstName, opts => opts.Condition(src => src.FirstName != null))
+            .ForMember(dest => dest.LastName, opts => opts.Condition(src => src.LastName != null))
+            .ForMember(dest => dest.Password, opts => opts.Ignore())
+            .ForMember(dest => dest.Avatar, opts => opts.Condition(src => src.Avatar != null))
+            .ForMember(dest => dest.DateOfBirth, opts => opts.Condition(src => src.DateOfBirth.HasValue))
+            .ForMember(dest => dest.UserRole, opts => opts.Condition(src => src.UserRole.HasValue))
+            .ForMember(dest => dest.PhoneNumber, opts => opts.Condition(src => src.PhoneNumber != null));
 
         CreateMap<User, UserReadDTO>();
         CreateMap<UserCreateDTO, User>();

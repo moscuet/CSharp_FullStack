@@ -36,13 +36,13 @@ namespace Eshop.Service.src.Service
 
             var user = _mapper.Map<User>(userDTO);
             user.Password = _passwordService.HashPassword(user.Password, out var salt);
-             user.Salt = salt;
+            user.Salt = salt;
 
             var createdUser = await _userRepo.CreateAsync(user);
             return _mapper.Map<UserReadDTO>(createdUser);
         }
 
-          public async Task<UserReadDTO> GetUserProfileAsync(Guid id)
+        public async Task<UserReadDTO> GetUserProfileAsync(Guid id)
         {
             var user = await _userRepo.GetByIdAsync(id);
             if (user == null)
@@ -51,7 +51,7 @@ namespace Eshop.Service.src.Service
             }
             return _mapper.Map<UserReadDTO>(user);
         }
-        
+
         public async Task<bool> DeleteUserByIdAsync(Guid id)
         {
             var existingUser = await _userRepo.GetByIdAsync(id);
@@ -77,12 +77,13 @@ namespace Eshop.Service.src.Service
                 throw AppException.NotFound($"User with ID {id} not found.");
             }
 
-            Console.WriteLine($"Existing User: {JsonSerializer.Serialize(existingUser)}");
-
             _mapper.Map(userDTO, existingUser);
 
-            Console.WriteLine($"Updated User from service: {JsonSerializer.Serialize(existingUser)}");
-
+            if (!string.IsNullOrEmpty(userDTO.Password))
+            {
+                existingUser.Password = _passwordService.HashPassword(userDTO.Password, out var salt);
+                existingUser.Salt = salt;
+            }
             return await _userRepo.UpdateAsync(existingUser);
         }
     }

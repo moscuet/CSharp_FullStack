@@ -29,6 +29,7 @@ namespace Eshop.WebApi.src.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
+            // .AddInterceptors(new TimeStampInterceptor())
             .UseSnakeCaseNamingConvention();
         }
 

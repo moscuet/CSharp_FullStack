@@ -29,15 +29,18 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 // adding db context into your app (alia)
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("PgDbConnection"));
+
 dataSourceBuilder.MapEnum<UserRole>();
 var dataSource = dataSourceBuilder.Build();
+
 builder.Services.AddDbContext<EshopDbContext>
 (
     options =>
     options.UseNpgsql(dataSource)
     .UseSnakeCaseNamingConvention()
-    // .AddInterceptors(new TimeStampInteceptor())
+    .AddInterceptors(new TimeStampInterceptor())
 );
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(
