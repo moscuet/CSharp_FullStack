@@ -62,5 +62,10 @@ namespace Eshop.WebApi.src.Repo
         {
             return await _users.AnyAsync(user => user.Email == email);
         }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _users.FirstOrDefaultAsync(user => user.Email == email);
+        }
     }
 }

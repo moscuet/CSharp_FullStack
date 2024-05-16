@@ -1,12 +1,12 @@
 using AutoMapper;
+using System.Net;
+using System.Text.Json;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.Entity;
 using Eshop.Core.src.RepoAbstraction;
 using Eshop.Service.src.DTO;
 using Eshop.Service.src.ServiceAbstraction;
 using Eshop.Service.src.Validation;
-using System.Net;
-using System.Text.Json;
 
 namespace Eshop.Service.src.Service
 {
@@ -42,6 +42,16 @@ namespace Eshop.Service.src.Service
             return _mapper.Map<UserReadDTO>(createdUser);
         }
 
+          public async Task<UserReadDTO> GetUserProfileAsync(Guid id)
+        {
+            var user = await _userRepo.GetByIdAsync(id);
+            if (user == null)
+            {
+                throw AppException.NotFound($"User with ID {id} not found.");
+            }
+            return _mapper.Map<UserReadDTO>(user);
+        }
+        
         public async Task<bool> DeleteUserByIdAsync(Guid id)
         {
             var existingUser = await _userRepo.GetByIdAsync(id);
@@ -57,17 +67,6 @@ namespace Eshop.Service.src.Service
         {
             var users = await _userRepo.GetAllUsersAsync(options);
             return _mapper.Map<IEnumerable<UserReadDTO>>(users);
-        }
-
-        public async Task<UserReadDTO> GetUserByIdAsync(Guid id)
-        {
-            var user = await _userRepo.GetByIdAsync(id);
-            if (user == null)
-            {
-                throw AppException.NotFound($"User with ID {id} not found.");
-            }
-
-            return _mapper.Map<UserReadDTO>(user);
         }
 
         public async Task<bool> UpdateUserByIdAsync(Guid id, UserUpdateDTO userDTO)
