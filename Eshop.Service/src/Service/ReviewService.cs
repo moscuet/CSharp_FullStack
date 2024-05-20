@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.RepositoryAbstraction;
@@ -17,12 +18,19 @@ namespace Eshop.Service.src.Service
         }
 
 
-       public override async Task<ReviewReadDTO> CreateAsync(ReviewCreateDTO createDto)
-    {
-        var review = _mapper.Map<Review>(createDto);
-        var createdReview = await _reviewRepository.CreateAsync(review);
-        return _mapper.Map<ReviewReadDTO>(createdReview);
-    }
+     public override async Task<ReviewReadDTO> CreateAsync(ReviewCreateDTO reviewCreateDto)
+        {
+            // Convert ReviewCreateDTO to Review entity
+            var review = _mapper.Map<Review>(reviewCreateDto);
+
+            // Log the DTO before creating the review
+            Console.WriteLine($"004: {JsonSerializer.Serialize(reviewCreateDto)}");
+            Console.WriteLine($"005: {JsonSerializer.Serialize(review)}");
+
+            // Create the review with images
+            var createdReview = await _reviewRepository.CreateWithImagesAsync(review, reviewCreateDto.ImageUrls);
+            return _mapper.Map<ReviewReadDTO>(createdReview);
+        }
     
 
         public async Task<IEnumerable<ReviewReadDTO>> GetReviewsByProductIdAsync(Guid productId)

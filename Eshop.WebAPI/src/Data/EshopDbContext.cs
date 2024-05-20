@@ -179,30 +179,32 @@ namespace Eshop.WebApi.src.Data
                       .HasForeignKey(i => i.EntityId)
                       .OnDelete(DeleteBehavior.Cascade);
             });
+
+
             // Image Configuration
+          // Configuration for Image
             modelBuilder.Entity<Image>(entity =>
             {
                 entity.Property(e => e.Url).IsRequired().HasMaxLength(2048);
 
-                // Discriminator configuration
                 entity.HasDiscriminator<EntityType>("EntityType")
                       .HasValue<Image>(EntityType.Product)
                       .HasValue<Image>(EntityType.Review);
 
-                // Configure relationships
-                entity.HasOne<Product>()
+                entity.HasOne(e => e.Product)
                       .WithMany(p => p.Images)
-                      .HasForeignKey(i => i.EntityId)
+                      .HasForeignKey(e => e.ProductId)
                       .OnDelete(DeleteBehavior.Cascade)
                       .IsRequired(false);
 
-                entity.HasOne<Review>()
+                entity.HasOne(e => e.Review)
                       .WithMany(r => r.Images)
-                      .HasForeignKey(i => i.EntityId)
+                      .HasForeignKey(e => e.ReviewId)
                       .OnDelete(DeleteBehavior.Cascade)
                       .IsRequired(false);
             });
 
+            
             // Order Configuration
             modelBuilder.Entity<Order>(entity =>
             {

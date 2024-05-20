@@ -83,19 +83,18 @@ public class MappingProfile : Profile
 
 
         // Custom mapping for ReviewCreateControllerDTO to ReviewCreateDTO
-        CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>()
-           .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageUrls.Select(url => new ImageCreateDTO { Url = url })));
+         CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>();
 
-        CreateMap<ReviewCreateDTO, Review>()
-            .ForMember(dest => dest.Images, opt => opt.Ignore());
+            // Map from ReviewCreateDTO to Review
+            CreateMap<ReviewCreateDTO, Review>();
+              
 
-        CreateMap<Review, ReviewReadDTO>();
-        CreateMap<ReviewUpdateDTO, Review>()
-            .ForMember(dest => dest.Comment, opts => opts.Condition(src => src.Comment != null))
-            .ForMember(dest => dest.Rating, opts => opts.Condition(src => src.Rating.HasValue))
-            .ForMember(dest => dest.IsAnonymous, opts => opts.Condition(src => src.IsAnonymous.HasValue));
+            // Map from Review to ReviewReadDTO and convert Images to ImageReadDTO
+            CreateMap<Review, ReviewReadDTO>();
 
-        CreateMap<ImageCreateDTO, Image>();
+            // Map from ReviewUpdateDTO to Review and update only non-null fields
+            CreateMap<ReviewUpdateDTO, Review>();
+    
 
 
 
@@ -105,6 +104,7 @@ public class MappingProfile : Profile
         CreateMap<Image, ImageReadDTO>();
         CreateMap<ImageUpdateDTO, Image>()
             .ForMember(dest => dest.Url, opts => opts.Condition(src => src.Url != null));
+
 
         // ProductColor mappings
         CreateMap<ProductColor, ProductColorReadDTO>();

@@ -16,5 +16,13 @@ namespace Eshop.Core.src.Entity
 
         [Required, MaxLength(2048)]
         public string Url { get; set; }
+
+        public Guid? ProductId { get; set; }
+        public Guid? ReviewId { get; set; }
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
+
+        [ForeignKey("ReviewId")]
+        public Review Review { get; set; }
     }
 }

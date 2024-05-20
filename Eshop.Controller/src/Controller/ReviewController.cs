@@ -32,18 +32,24 @@ namespace Eshop.Controller.src.Controllers
         // POST: Create a new review
        [Authorize]
         [HttpPost]
-        public async Task<ActionResult<ReviewReadDTO>> CreateAsync([FromBody] ReviewCreateControllerDTO reviewDto)
+        public async Task<ActionResult<ReviewReadDTO>> CreateAsync([FromBody] ReviewCreateDTO reviewDto)
         {
             var (userId, _) = UserContextHelper.GetUserClaims(HttpContext);
 
-            var reviewCreateDto = _mapper.Map<ReviewCreateDTO>(reviewDto);
-            reviewCreateDto.UserId = userId.Value;
+            // Log the received DTO
+            Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(reviewDto)}\n");
 
-            var createdReview = await _reviewService.CreateAsync(reviewCreateDto);
+            // Add the UserId to the DTO
+            reviewDto.UserId = userId.Value;
+
+            // Log the transformed DTO
+            Console.WriteLine($"From controller: reviewCreateDto with UserId: {JsonSerializer.Serialize(reviewDto)}\n");
+
+            // Create the review
+            var createdReview = await _reviewService.CreateAsync(reviewDto);
 
             return Ok(createdReview);
         }
-
 
 
         // GET: Review by id

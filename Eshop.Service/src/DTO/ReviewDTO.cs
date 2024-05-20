@@ -19,7 +19,7 @@ public class ReviewCreateDTO
     public string Comment { get; set; }
     public int Rating { get; set; }
     public bool IsAnonymous { get; set; }
-    public List<ImageCreateDTO> Images { get; set; } = new List<ImageCreateDTO>();
+    public List<string> ImageUrls { get; set; } = new List<string>();
 }
 
 

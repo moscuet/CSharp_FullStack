@@ -84,6 +84,10 @@ builder.Services.AddScoped<IProductColorRepository, ProductColorRepository>();
 builder.Services.AddScoped<IProductColorService, ProductColorService>();
 builder.Services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
 builder.Services.AddScoped<IProductSizeService, ProductSizeService>();
+builder.Services.AddScoped<ImageService, ImageService>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+
+
 
 builder.Services.AddScoped<ExceptionHandlerMiddleware>();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
