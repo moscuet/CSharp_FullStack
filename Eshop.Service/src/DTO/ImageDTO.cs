@@ -16,4 +16,6 @@ public class ImageReadDTO
 {
     public Guid Id { get; set; }
     public string Url { get; set; }
+    public EntityType EntityType { get; set; }
+    public Guid EntityId { get; set; }
 }
