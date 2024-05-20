@@ -23,12 +23,12 @@ public class Review : BaseEntity
 
 
     [ForeignKey("ProductId")]
-    public Product product { get; }
+        public virtual Product Product { get; set; }
 
     [ForeignKey("UserId")]
-    public User User { get; }
+        public virtual User User { get; set; }
 
-     public List<Image> Images { get; private set; } = new List<Image>();
+        public virtual List<Image> Images { get; private set; } = new List<Image>();
 
         public void AddImage(Image image)
         {

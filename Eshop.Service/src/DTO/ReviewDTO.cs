@@ -2,6 +2,16 @@ using Eshop.Core.src.Entity;
 
 namespace Eshop.Service.src.DTO;
 
+
+public class ReviewCreateControllerDTO
+{
+    public Guid ProductId { get; set; }
+    public string Comment { get; set; }
+    public int Rating { get; set; }
+    public bool IsAnonymous { get; set; }
+    public List<string> ImageUrls { get; set; } = new List<string>();
+}
+
 public class ReviewCreateDTO
 {
     public Guid UserId { get; set; }
@@ -9,7 +19,9 @@ public class ReviewCreateDTO
     public string Comment { get; set; }
     public int Rating { get; set; }
     public bool IsAnonymous { get; set; }
+    public List<ImageCreateDTO> Images { get; set; } = new List<ImageCreateDTO>();
 }
+
 
 public class ReviewReadDTO
 {

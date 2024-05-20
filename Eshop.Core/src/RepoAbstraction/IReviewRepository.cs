@@ -6,5 +6,6 @@ namespace Eshop.Core.src.RepositoryAbstraction
     {
         Task<IEnumerable<Review>> GetReviewsByProductIdAsync(Guid productId);
         Task<IEnumerable<Review>> GetReviewsByUserIdAsync(Guid userId);
-    }
+        Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions options);
+  }
 }

@@ -1,8 +1,9 @@
 using AutoMapper;
 using Eshop.Core.src.Entity;
+using Eshop.Core.src.ValueObject;
 using Eshop.Service.src.DTO;
 
-    public class MappingProfile : Profile
+public class MappingProfile : Profile
 {
     public MappingProfile()
     {
@@ -10,7 +11,7 @@ using Eshop.Service.src.DTO;
         CreateMap<UserUpdateDTO, User>()
             .ForMember(dest => dest.FirstName, opts => opts.Condition(src => src.FirstName != null))
             .ForMember(dest => dest.LastName, opts => opts.Condition(src => src.LastName != null))
-            .ForMember(dest => dest.Password, opts => opts.Ignore())
+            .ForMember(dest => dest.Password, opts => opts.Condition(src => src.Password != null))
             .ForMember(dest => dest.Avatar, opts => opts.Condition(src => src.Avatar != null))
             .ForMember(dest => dest.DateOfBirth, opts => opts.Condition(src => src.DateOfBirth.HasValue))
             .ForMember(dest => dest.UserRole, opts => opts.Condition(src => src.UserRole.HasValue))
@@ -22,31 +23,100 @@ using Eshop.Service.src.DTO;
         // Address mappings
         CreateMap<Address, AddressReadDTO>();
         CreateMap<AddressCreateDTO, Address>();
-        CreateMap<AddressUpdateDTO, Address>();
+        CreateMap<AddressUpdateDTO, Address>()
+             .ForMember(dest => dest.Street, opts => opts.Condition(src => src.Street != null))
+             .ForMember(dest => dest.House, opts => opts.Condition(src => src.House != null))
+             .ForMember(dest => dest.City, opts => opts.Condition(src => src.City != null))
+             .ForMember(dest => dest.ZipCode, opts => opts.Condition(src => src.ZipCode != null))
+             .ForMember(dest => dest.Country, opts => opts.Condition(src => src.Country != null))
+             .ForMember(dest => dest.PhoneNumber, opts => opts.Condition(src => src.PhoneNumber != null));
 
         // Product mappings
-        CreateMap<Product, ProductReadDTO>();
+        CreateMap<Product, ProductReadDTO>()
+            .ForMember(dest => dest.ProductLineName, opts => opts.MapFrom(src => src.ProductLine.Title))
+            .ForMember(dest => dest.SizeValue, opts => opts.MapFrom(src => src.Size != null ? src.Size.Value : null))
+            .ForMember(dest => dest.ColorValue, opts => opts.MapFrom(src => src.Color != null ? src.Color.Value.ToString() : null))
+            .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.Images)); // Ensure the mapping for images
+
         CreateMap<ProductCreateDTO, Product>();
-        CreateMap<ProductUpdateDTO, Product>();
+        CreateMap<ProductUpdateDTO, Product>()
+            .ForMember(dest => dest.ProductLineId, opts => opts.Condition(src => src.ProductLineId.HasValue))
+            .ForMember(dest => dest.SizeId, opts => opts.Condition(src => src.SizeId.HasValue))
+            .ForMember(dest => dest.ColorId, opts => opts.Condition(src => src.ColorId.HasValue))
+            .ForMember(dest => dest.Inventory, opts => opts.Condition(src => src.Inventory.HasValue));
+
+        // ProductLine mappings
+        CreateMap<ProductLine, ProductLineReadDTO>()
+            .ForMember(dest => dest.CategoryName, opts => opts.MapFrom(src => src.Category.Name));
+        CreateMap<ProductLineCreateDTO, ProductLine>();
+        CreateMap<ProductLineUpdateDTO, ProductLine>()
+            .ForMember(dest => dest.Title, opts => opts.Condition(src => src.Title != null))
+            .ForMember(dest => dest.Description, opts => opts.Condition(src => src.Description != null))
+            .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price.HasValue))
+            .ForMember(dest => dest.CategoryId, opts => opts.Condition(src => src.CategoryId.HasValue));
 
         // Order mappings
         CreateMap<Order, OrderReadDTO>();
         CreateMap<OrderCreateDTO, Order>();
-        CreateMap<OrderUpdateDTO, Order>();
+        CreateMap<OrderUpdateDTO, Order>()
+                    .ForMember(dest => dest.AddressId, opts => opts.Condition(src => src.AddressId.HasValue))
+                    .ForMember(dest => dest.Status, opts => opts.Condition(src => src.Status.HasValue))
+                    .ForMember(dest => dest.Total, opts => opts.Condition(src => src.Total.HasValue));
 
         // OrderItem mappings
         CreateMap<OrderItem, OrderItemReadDTO>();
         CreateMap<OrderItemCreateDTO, OrderItem>();
+        CreateMap<OrderItemUpdateDTO, OrderItem>()
+                    .ForMember(dest => dest.Quantity, opts => opts.Condition(src => src.Quantity > 0))  // Ensure quantity is greater than 0
+                    .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price > 0)); // Ensure price is greater than 0
 
         // Category mappings
         CreateMap<Category, CategoryReadDTO>();
         CreateMap<CategoryCreateDTO, Category>();
+        CreateMap<CategoryUpdateDTO, Category>()
+            .ForMember(dest => dest.Name, opts => opts.Condition(src => src.Name != null))
+            .ForMember(dest => dest.ParentCategoryId, opts => opts.Condition(src => src.ParentCategoryId.HasValue))
+            .ForMember(dest => dest.ImageUrl, opts => opts.Condition(src => src.ImageUrl != null));
 
-        // Review mappings
+
+
+
+
+        // Custom mapping for ReviewCreateControllerDTO to ReviewCreateDTO
+        CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>()
+           .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageUrls.Select(url => new ImageCreateDTO { Url = url })));
+
+        CreateMap<ReviewCreateDTO, Review>()
+            .ForMember(dest => dest.Images, opt => opt.Ignore());
+
         CreateMap<Review, ReviewReadDTO>();
-        CreateMap<ReviewCreateDTO, Review>();
-        CreateMap<ReviewUpdateDTO, Review>();
+        CreateMap<ReviewUpdateDTO, Review>()
+            .ForMember(dest => dest.Comment, opts => opts.Condition(src => src.Comment != null))
+            .ForMember(dest => dest.Rating, opts => opts.Condition(src => src.Rating.HasValue))
+            .ForMember(dest => dest.IsAnonymous, opts => opts.Condition(src => src.IsAnonymous.HasValue));
 
+        CreateMap<ImageCreateDTO, Image>();
+
+
+
+        // Image mappings
+        CreateMap<ImageCreateDTO, Image>()
+            .ForMember(dest => dest.Url, opts => opts.Condition(src => src.Url != null));
+        CreateMap<Image, ImageReadDTO>();
+        CreateMap<ImageUpdateDTO, Image>()
+            .ForMember(dest => dest.Url, opts => opts.Condition(src => src.Url != null));
+
+        // ProductColor mappings
+        CreateMap<ProductColor, ProductColorReadDTO>();
+        CreateMap<ProductColorCreateDTO, ProductColor>();
+        CreateMap<ProductColorUpdateDTO, ProductColor>()
+            .ForMember(dest => dest.Value, opts => opts.Condition(src => src.Value != null));
+
+        // ProductSize mappings
+        CreateMap<ProductSize, ProductSizeReadDTO>();
+        CreateMap<ProductSizeCreateDTO, ProductSize>();
+        CreateMap<ProductSizeUpdateDTO, ProductSize>()
+            .ForMember(dest => dest.Value, opts => opts.Condition(src => src.Value != null));
     }
 }
 
