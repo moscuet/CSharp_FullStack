@@ -2,7 +2,7 @@ namespace Eshop.Service.src.DTO;
 
 public class AddressCreateDTO
 {
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
     public string Street { get; set; }
     public string House { get; set; }
     public string City { get; set; }
@@ -13,7 +13,8 @@ public class AddressCreateDTO
 
 public class AddressReadDTO
 {
-    public Guid Id { get; set; }
+public Guid Id { get; set; }
+    public Guid UserId { get; set; }
     public string Street { get; set; }
     public string House { get; set; }
     public string City { get; set; }
