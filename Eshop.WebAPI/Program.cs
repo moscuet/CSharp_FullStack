@@ -78,14 +78,11 @@ builder.Services.AddScoped<IProductLineRepository, ProductLineRepository>();
 builder.Services.AddScoped<IProductLineService, ProductLineService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IProductColorRepository, ProductColorRepository>();
 builder.Services.AddScoped<IProductColorService, ProductColorService>();
 builder.Services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
 builder.Services.AddScoped<IProductSizeService, ProductSizeService>();
-builder.Services.AddScoped<ImageService, ImageService>();
-builder.Services.AddScoped<IImageRepository, ImageRepository>();
+
 
 
 
@@ -95,11 +92,11 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 var app = builder.Build();
 
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<EshopDbContext>();
-    dbContext.InitializeDatabaseAsync().Wait();
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var dbContext = scope.ServiceProvider.GetRequiredService<EshopDbContext>();
+//     dbContext.InitializeDatabaseAsync().Wait();
+// }
 
 // Configure middlewares...
 app.UseSwagger();

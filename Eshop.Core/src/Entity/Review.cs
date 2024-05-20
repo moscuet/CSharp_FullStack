@@ -22,26 +22,13 @@ public class Review : BaseEntity
     public bool IsAnonymous { get; set; } = false; 
 
 
-    [ForeignKey("ProductId")]
+      [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
 
-    [ForeignKey("UserId")]
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
-        public virtual List<Image> Images { get; private set; } = new List<Image>();
+        public virtual ICollection<ReviewImage> ReviewImages { get; set; } = new List<ReviewImage>();
 
-        public void AddImage(Image image)
-        {
-            Images.Add(image);
-        }
-
-        public void RemoveImage(Guid imageId)
-        {
-            var image = Images.FirstOrDefault(i => i.Id == imageId);
-            if (image != null)
-            {
-                Images.Remove(image);
-            }
-        }
 }
 

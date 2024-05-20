@@ -61,14 +61,10 @@ namespace Eshop.WebApi.src.Repo
             return true;
         }
 
-        public async Task<IEnumerable<Image>> GetImagesByEntityIdAsync(Guid entityId)
-        {
-            return await _images.Where(i => i.EntityId == entityId).ToListAsync();
-        }
 
         public async Task<IEnumerable<Image>> GetAllImagesAsync(QueryOptions options)
         {
-            return await _images.ToListAsync(); // Apply any options-based filtering here as needed
+            return await _images.ToListAsync(); 
         }
     }
 }

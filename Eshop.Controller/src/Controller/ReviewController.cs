@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Eshop.Service.src.ServiceAbstraction;
 using Eshop.Service.src.DTO;
 using Eshop.Core.src.Common;
-using Eshop.Core.src.Entity;
 
 using AutoMapper;
 using System.Text.Json;
-using Eshop.Core.src.ValueObject;
 
 // using System.Transactions;
 
@@ -23,7 +21,7 @@ namespace Eshop.Controller.src.Controllers
         private readonly IReviewService _reviewService;
         private readonly IMapper _mapper;
 
-        public ReviewController(IReviewService reviewService, IImageService imageService, IMapper mapper)
+        public ReviewController(IReviewService reviewService, IMapper mapper)
         {
             _reviewService = reviewService;
             _mapper = mapper;
@@ -43,10 +41,11 @@ namespace Eshop.Controller.src.Controllers
             reviewDto.UserId = userId.Value;
 
             // Log the transformed DTO
-            Console.WriteLine($"From controller: reviewCreateDto with UserId: {JsonSerializer.Serialize(reviewDto)}\n");
 
             // Create the review
-            var createdReview = await _reviewService.CreateAsync(reviewDto);
+            var createdReview = await _reviewService.ReviewCreateAsync(reviewDto);
+
+            Console.WriteLine($"From controller: reviewcraeted: {JsonSerializer.Serialize(createdReview)}\n");
 
             return Ok(createdReview);
         }

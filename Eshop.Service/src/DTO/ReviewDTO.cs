@@ -31,7 +31,7 @@ public class ReviewReadDTO
     public string Comment { get; set; }
     public int Rating { get; set; }
     public bool IsAnonymous { get; set; }
-    public List<Image> Images { get; set; }
+    public List<ReviewImage> Images { get; set; }
 }
 
 public class ReviewUpdateDTO

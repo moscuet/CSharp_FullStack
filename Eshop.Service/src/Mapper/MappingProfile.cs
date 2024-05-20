@@ -34,15 +34,15 @@ public class MappingProfile : Profile
         // Product mappings
         CreateMap<Product, ProductReadDTO>()
             .ForMember(dest => dest.ProductLineName, opts => opts.MapFrom(src => src.ProductLine.Title))
-            .ForMember(dest => dest.SizeValue, opts => opts.MapFrom(src => src.Size != null ? src.Size.Value : null))
-            .ForMember(dest => dest.ColorValue, opts => opts.MapFrom(src => src.Color != null ? src.Color.Value.ToString() : null))
-            .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.Images)); // Ensure the mapping for images
+            .ForMember(dest => dest.SizeValue, opts => opts.MapFrom(src => src.ProductSize != null ? src.ProductSize.Value : null))
+            .ForMember(dest => dest.ColorValue, opts => opts.MapFrom(src => src.ProductColor != null ? src.ProductColor.Value.ToString() : null))
+            .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.ProductImages)); // Ensure the mapping for images
 
         CreateMap<ProductCreateDTO, Product>();
         CreateMap<ProductUpdateDTO, Product>()
             .ForMember(dest => dest.ProductLineId, opts => opts.Condition(src => src.ProductLineId.HasValue))
-            .ForMember(dest => dest.SizeId, opts => opts.Condition(src => src.SizeId.HasValue))
-            .ForMember(dest => dest.ColorId, opts => opts.Condition(src => src.ColorId.HasValue))
+            .ForMember(dest => dest.ProductSizeId, opts => opts.Condition(src => src.SizeId.HasValue))
+            .ForMember(dest => dest.ProductColorId, opts => opts.Condition(src => src.ColorId.HasValue))
             .ForMember(dest => dest.Inventory, opts => opts.Condition(src => src.Inventory.HasValue));
 
         // ProductLine mappings
@@ -83,27 +83,10 @@ public class MappingProfile : Profile
 
 
         // Custom mapping for ReviewCreateControllerDTO to ReviewCreateDTO
-         CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>();
+        CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>();
 
-            // Map from ReviewCreateDTO to Review
-            CreateMap<ReviewCreateDTO, Review>();
-              
-
-            // Map from Review to ReviewReadDTO and convert Images to ImageReadDTO
-            CreateMap<Review, ReviewReadDTO>();
-
-            // Map from ReviewUpdateDTO to Review and update only non-null fields
-            CreateMap<ReviewUpdateDTO, Review>();
-    
-
-
-
-        // Image mappings
-        CreateMap<ImageCreateDTO, Image>()
-            .ForMember(dest => dest.Url, opts => opts.Condition(src => src.Url != null));
-        CreateMap<Image, ImageReadDTO>();
-        CreateMap<ImageUpdateDTO, Image>()
-            .ForMember(dest => dest.Url, opts => opts.Condition(src => src.Url != null));
+        // Map from ReviewCreateDTO to Review
+        CreateMap<ReviewCreateDTO, Review>();
 
 
         // ProductColor mappings

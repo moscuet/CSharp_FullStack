@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Eshop.Service.src.ServiceAbstraction;
 using Eshop.Service.src.DTO;
-using System.Security.Claims;
-using System.Text.Json;
 
 namespace Eshop.Controller.src.Controllers
 {

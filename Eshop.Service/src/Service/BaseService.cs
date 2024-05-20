@@ -21,9 +21,9 @@ namespace Eshop.Service.src.Service
         public virtual async Task<TReadDTO> CreateAsync(TCreateDTO createDto)
         {
             var entity = _mapper.Map<TEntity>(createDto);
-             EntityValidator.ValidateEntity(entity); 
+            EntityValidator.ValidateEntity(entity);
             var createdEntity = await _repository.CreateAsync(entity);
-            var res =   _mapper.Map<TReadDTO>(createdEntity);
+            var res = _mapper.Map<TReadDTO>(createdEntity);
             return res;
         }
 
@@ -50,7 +50,14 @@ namespace Eshop.Service.src.Service
                 throw new KeyNotFoundException($"Entity with ID {id} not found.");
             }
 
-            return _mapper.Map<TReadDTO>(entity);
+
+            var mappedEntity = _mapper.Map<TReadDTO>(entity);
+
+
+            Console.WriteLine($"From controller: reviewcraeted: {JsonSerializer.Serialize(mappedEntity)}\n");
+
+
+            return mappedEntity;
         }
 
         public virtual async Task<bool> DeleteByIdAsync(Guid id)

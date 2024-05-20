@@ -2,10 +2,8 @@ using System.Text.Json;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.Entity;
 using Eshop.Core.src.RepositoryAbstraction;
-using Eshop.Core.src.ValueObject;
 using Eshop.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Eshop.WebApi.src.Repo
 {
@@ -28,36 +26,45 @@ namespace Eshop.WebApi.src.Repo
             return entity;
         }
 
-
-public async Task<Review> CreateWithImagesAsync(Review review, List<string> imageUrls)
+        public async Task<Review> CreateWithImagesAsync(Review review, List<string> imageUrls)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 // Add the review first
                 await _context.Reviews.AddAsync(review);
-                await _context.SaveChangesAsync(); // Ensure the review is saved and has a valid ID
+                await _context.SaveChangesAsync();
 
-                // Create and add images to the review using the generated review Id
-                var images = imageUrls.Select(url => new Image
+                Console.WriteLine($"\nReview saved with ID: {review.Id}\n");
+
+                var images = imageUrls.Select(url => new ReviewImage
                 {
-                    EntityId = review.Id, // Use the generated review Id
-                    EntityType = EntityType.Review,
+                    ReviewId = review.Id,
                     Url = url
                 }).ToList();
 
-                await _context.Images.AddRangeAsync(images);
-                
+                await _context.AddRangeAsync(images);
+                await _context.SaveChangesAsync();
 
-                await _context.SaveChangesAsync(); // Save images to the database
+                Console.WriteLine($"\nImages saved for review ID: {review.Id}\n");
 
-                await transaction.CommitAsync(); // Commit the transaction
-               
-                       Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(review)}");
+                await transaction.CommitAsync();
 
-                return review;
+                // Query to get all images connected with the review
+                var savedImages = await _context.ReviewImages
+                    .Where(i => i.ReviewId == review.Id)
+                    .ToListAsync();
 
+                Console.WriteLine($"\nSaved Images: {JsonSerializer.Serialize(savedImages)}\n");
 
+                // Reload the review to include the images
+                var updatedReview = await _context.Reviews
+                    .Include(r => r.ReviewImages)
+                    .FirstOrDefaultAsync(r => r.Id == review.Id);
+
+                Console.WriteLine($"\nFrom review repo: created review: {JsonSerializer.Serialize(updatedReview)}\n");
+
+                return updatedReview;
             }
             catch (Exception ex)
             {
@@ -65,6 +72,8 @@ public async Task<Review> CreateWithImagesAsync(Review review, List<string> imag
                 throw new Exception("An error occurred while creating the review with images.", ex);
             }
         }
+
+
 
 
         public async Task<bool> UpdateAsync(Review review)
@@ -84,13 +93,21 @@ public async Task<Review> CreateWithImagesAsync(Review review, List<string> imag
 
         public async Task<Review> GetByIdAsync(Guid id)
         {
-            var review = await _reviews.FirstOrDefaultAsync(r => r.Id == id);
+            var review = await _context.Reviews
+                .Include(r => r.ReviewImages)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
             if (review == null)
             {
-                throw AppException.NotFound($"Review with ID {id} not found.");
+                throw new KeyNotFoundException($"Review with ID {id} not found.");
             }
+
+            Console.WriteLine($"Review: {JsonSerializer.Serialize(review)}");
+            Console.WriteLine($"Images: {JsonSerializer.Serialize(review.ReviewImages)}");
+
             return review;
         }
+
 
         public async Task<bool> DeleteByIdAsync(Guid id)
         {

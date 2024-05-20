@@ -11,9 +11,9 @@ namespace Eshop.Core.src.Entity
         [Required]
         public Guid ProductLineId { get; set; }
 
-        public Guid? SizeId { get; set; }
+        public Guid? ProductSizeId { get; set; }
 
-        public Guid? ColorId { get; set; }
+        public Guid? ProductColorId { get; set; }
 
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Inventory must not be a negative number")]
@@ -22,12 +22,13 @@ namespace Eshop.Core.src.Entity
         [ForeignKey("ProductLineId")]
         public virtual ProductLine ProductLine { get; set; }
 
-        [ForeignKey("SizeId")]
-        public virtual ProductSize? Size { get; set; }
+        [ForeignKey("ProductSizeId")]
+        public virtual ProductSize ProductSize { get; set; }
 
-        [ForeignKey("ColorId")]
-        public virtual ProductColor? Color { get; set; }
+        [ForeignKey("ProductColorId")]
+        public virtual ProductColor ProductColor { get; set; }
 
-        public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+        public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

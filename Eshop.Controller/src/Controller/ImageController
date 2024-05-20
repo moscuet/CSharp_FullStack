@@ -55,15 +55,6 @@ namespace Eshop.Controller.src.Controllers
             return Ok(image);
         }
 
-        // GET: Get all images for an entity
-        [HttpGet("entity/{entityId}")]
-        public async Task<ActionResult<IEnumerable<ImageReadDTO>>> GetImagesByEntityIdAsync(Guid entityId)
-        {
-            var images = await _imageService.GetImagesByEntityIdAsync(entityId);
-            return Ok(images);
-        }
-
-
         // DELETE: Delete an image by ID
         [Authorize]
         [HttpDelete("{id}")]

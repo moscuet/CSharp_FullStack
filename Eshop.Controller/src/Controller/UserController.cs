@@ -89,7 +89,7 @@ namespace Eshop.Controller.src.Controller
 
 
         // Create admin (Super Admin only)
-        // [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost("create-admin")]
         public async Task<ActionResult<UserReadDTO>> CreateAdminAsync([FromBody] UserCreateDTO userCreateDTO)
         {

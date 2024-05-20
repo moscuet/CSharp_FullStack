@@ -17,11 +17,6 @@ namespace Eshop.Service.src.Service
             _imageRepository = imageRepository;
         }
 
-        public async Task<IEnumerable<ImageReadDTO>> GetImagesByEntityIdAsync(Guid entityId)
-        {
-            var images = await _imageRepository.GetImagesByEntityIdAsync(entityId);
-            return _mapper.Map<IEnumerable<ImageReadDTO>>(images);
-        }
 
         public async Task<IEnumerable<ImageReadDTO>> GetAllImagesAsync(QueryOptions options)
         {

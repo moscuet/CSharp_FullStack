@@ -18,7 +18,14 @@ namespace Eshop.Service.src.Service
         }
 
 
-     public override async Task<ReviewReadDTO> CreateAsync(ReviewCreateDTO reviewCreateDto)
+  public Task<ReviewReadDTO> CreateAsync(ReviewCreateDTO reviewCreateDto)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+     public  async Task<Review>  ReviewCreateAsync(ReviewCreateDTO reviewCreateDto)
         {
             // Convert ReviewCreateDTO to Review entity
             var review = _mapper.Map<Review>(reviewCreateDto);
@@ -29,9 +36,11 @@ namespace Eshop.Service.src.Service
 
             // Create the review with images
             var createdReview = await _reviewRepository.CreateWithImagesAsync(review, reviewCreateDto.ImageUrls);
-            return _mapper.Map<ReviewReadDTO>(createdReview);
+            return createdReview;
+            // return _mapper.Map<ReviewReadDTO>(createdReview);
         }
     
+
 
         public async Task<IEnumerable<ReviewReadDTO>> GetReviewsByProductIdAsync(Guid productId)
         {
@@ -51,5 +60,7 @@ namespace Eshop.Service.src.Service
             var reviews = await _reviewRepository.GetAllReviewsAsync(options);
             return _mapper.Map<IEnumerable<ReviewReadDTO>>(reviews);
         }
+
+      
     }
 }
