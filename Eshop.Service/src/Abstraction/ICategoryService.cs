@@ -7,5 +7,6 @@ namespace Eshop.Service.src.ServiceAbstraction
     public interface ICategoryService : IBaseService<CategoryCreateDTO, CategoryUpdateDTO, CategoryReadDTO>
     {
         Task<IEnumerable<CategoryReadDTO>> GetAllCategoriesAsync();
+        Task<CategoryReadDTO> FindByNameAsync(string name);
     }
 }
