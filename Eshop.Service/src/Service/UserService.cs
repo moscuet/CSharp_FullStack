@@ -8,20 +8,19 @@ using Eshop.Service.src.Validation;
 
 namespace Eshop.Service.src.Service
 {
-    public class UserService : IUserService
+    public class UserService : BaseService<User, UserCreateDTO, UserUpdateDTO, UserReadDTO>, IUserService
     {
         private readonly IUserRepository _userRepo;
-        private readonly IMapper _mapper;
         private readonly IPasswordService _passwordService;
 
         public UserService(IUserRepository userRepo, IMapper mapper, IPasswordService passwordService)
+            : base(userRepo, mapper)
         {
             _userRepo = userRepo;
-            _mapper = mapper;
             _passwordService = passwordService;
         }
 
-        public async Task<UserReadDTO> CreateAsync(UserCreateDTO userDTO)
+        public override async Task<UserReadDTO> CreateAsync(UserCreateDTO userDTO)
         {
             UserValidation.ValidateUserCreateDTO(userDTO);
 
@@ -40,34 +39,13 @@ namespace Eshop.Service.src.Service
             return _mapper.Map<UserReadDTO>(createdUser);
         }
 
-        public async Task<UserReadDTO> GetByIdAsync(Guid id)
-        {
-            var user = await _userRepo.GetByIdAsync(id);
-            if (user == null)
-            {
-                throw AppException.NotFound($"User with ID {id} not found.");
-            }
-            return _mapper.Map<UserReadDTO>(user);
-        }
-
-        public async Task<bool> DeleteByIdAsync(Guid id)
-        {
-            var existingUser = await _userRepo.GetByIdAsync(id);
-            if (existingUser == null)
-            {
-                throw AppException.NotFound($"User with ID {id} not found.");
-            }
-
-            return await _userRepo.DeleteByIdAsync(id);
-        }
-
         public async Task<IEnumerable<UserReadDTO>> GetAllUsersAsync(QueryOptions options)
         {
             var users = await _userRepo.GetAllUsersAsync(options);
             return _mapper.Map<IEnumerable<UserReadDTO>>(users);
         }
 
-        public async Task<bool> UpdateAsync(Guid id, UserUpdateDTO userDTO)
+        public override async Task<bool> UpdateAsync(Guid id, UserUpdateDTO userDTO)
         {
             var existingUser = await _userRepo.GetByIdAsync(id);
             if (existingUser == null)

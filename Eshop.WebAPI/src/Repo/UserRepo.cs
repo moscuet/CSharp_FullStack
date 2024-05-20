@@ -3,7 +3,6 @@ using Eshop.Core.src.Entity;
 using Eshop.Core.src.RepoAbstraction;
 using Eshop.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 
 namespace Eshop.WebApi.src.Repo
 {
