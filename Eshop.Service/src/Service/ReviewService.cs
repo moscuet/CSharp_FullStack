@@ -1,4 +1,3 @@
-using System.Text.Json;
 using AutoMapper;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.RepositoryAbstraction;
@@ -17,29 +16,12 @@ namespace Eshop.Service.src.Service
             _reviewRepository = reviewRepository;
         }
 
-
-  public Task<ReviewReadDTO> CreateAsync(ReviewCreateDTO reviewCreateDto)
-        {
-            throw new NotImplementedException();
-        }
-
-
      public  async Task<Review>  ReviewCreateAsync(ReviewCreateDTO reviewCreateDto)
         {
-            // Convert ReviewCreateDTO to Review entity
             var review = _mapper.Map<Review>(reviewCreateDto);
-
-            // Log the DTO before creating the review
-            Console.WriteLine($"004: {JsonSerializer.Serialize(reviewCreateDto)}");
-            
-            Console.WriteLine($"005: {JsonSerializer.Serialize(review)}");
-
-            // Create the review with images
             var createdReview = await _reviewRepository.CreateWithImagesAsync(review, reviewCreateDto.ImageUrls);
             return createdReview;
-            // return _mapper.Map<ReviewReadDTO>(createdReview);
         }
-    
 
 
         public async Task<IEnumerable<ReviewReadDTO>> GetReviewsByProductIdAsync(Guid productId)
@@ -54,13 +36,12 @@ namespace Eshop.Service.src.Service
             return _mapper.Map<IEnumerable<ReviewReadDTO>>(reviews);
         }
 
-
         public async Task<IEnumerable<ReviewReadDTO>> GetAllReviewsAsync(QueryOptions options)
         {
             var reviews = await _reviewRepository.GetAllReviewsAsync(options);
             return _mapper.Map<IEnumerable<ReviewReadDTO>>(reviews);
         }
-
-      
     }
 }
+
+

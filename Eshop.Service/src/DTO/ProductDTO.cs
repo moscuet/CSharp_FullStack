@@ -1,4 +1,6 @@
 
+using Eshop.Core.src.Entity;
+
 namespace Eshop.Service.src.DTO;
  public class ProductCreateDTO
     {
@@ -19,8 +21,9 @@ namespace Eshop.Service.src.DTO;
         public string ProductLineName { get; set; }
         public string? SizeValue { get; set; }
         public string? ColorValue { get; set; }
-        public IEnumerable<ImageReadDTO> Images { get; set; } 
+        public IEnumerable<ProductImage> Images { get; set; } 
     }
+
 
 public class ProductUpdateDTO
     {

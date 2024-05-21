@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+
 using Eshop.Service.src.ServiceAbstraction;
 using Eshop.Service.src.DTO;
 using Eshop.Core.src.Common;
-
-using AutoMapper;
-using System.Text.Json;
-
-// using System.Transactions;
-
-// Console.WriteLine("@@@@@@@@@@@@@@###########################");
-// Console.WriteLine(JsonSerializer.Serialize(reviewCreateDto));
 
 namespace Eshop.Controller.src.Controllers
 {
@@ -33,20 +27,10 @@ namespace Eshop.Controller.src.Controllers
         public async Task<ActionResult<ReviewReadDTO>> CreateAsync([FromBody] ReviewCreateDTO reviewDto)
         {
             var (userId, _) = UserContextHelper.GetUserClaims(HttpContext);
-
-            // Log the received DTO
-            Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(reviewDto)}\n");
-
-            // Add the UserId to the DTO
+            
             reviewDto.UserId = userId.Value;
-
-            // Log the transformed DTO
-
-            // Create the review
             var createdReview = await _reviewService.ReviewCreateAsync(reviewDto);
             
-            Console.WriteLine($"From controller: reviewcraeted: {JsonSerializer.Serialize(createdReview)}\n");
-
             return Ok(_mapper.Map<ReviewReadDTO>(createdReview));
         }
 

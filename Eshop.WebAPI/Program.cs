@@ -14,7 +14,6 @@ using Eshop.WebApi.src.Repo;
 using Eshop.WebApi.src.Service;
 using Eshop.WebAPI.src.Service;
 using Eshop.Core.src.RepositoryAbstraction;
-using Eshop.Core.src.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,11 +96,11 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 var app = builder.Build();
 
 
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<EshopDbContext>();
-//     dbContext.InitializeDatabaseAsync().Wait();
-// }
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<EshopDbContext>();
+    dbContext.InitializeDatabaseAsync().Wait();
+}
 
 // Configure middlewares...
 app.UseSwagger();

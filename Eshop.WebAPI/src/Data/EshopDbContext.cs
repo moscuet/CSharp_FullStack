@@ -274,7 +274,6 @@ namespace Eshop.WebApi.src.Data
             entity.HasIndex(e => new { e.UserId, e.ProductId }).IsUnique(); // Composite unique key
       });
 
-
                   // ReviewImage Configuration
                   modelBuilder.Entity<ReviewImage>(entity =>
                   {
@@ -314,9 +313,6 @@ namespace Eshop.WebApi.src.Data
             .HasForeignKey(e => e.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
                   });
-
-
-
             }
 
 
@@ -335,19 +331,18 @@ namespace Eshop.WebApi.src.Data
                   return base.SaveChanges();
             }
 
-            // public async Task InitializeDatabaseAsync()
-            // {
-            //       var scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "src/Data/SqlScripts", "review_functions.sql");
-            //       if (File.Exists(scriptPath))
-            //       {
-            //             var script = await File.ReadAllTextAsync(scriptPath);
-            //             await Database.ExecuteSqlRawAsync(script);
-            //       }
-            //       else
-            //       {
-            //             Console.Error.WriteLine("Failed to find SQL script for initializing database functions.");
-            //       }
-            // }
-
+            public async Task InitializeDatabaseAsync()
+            {
+                  var scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "src/Data/SqlScripts", "review_functions.sql");
+                  if (File.Exists(scriptPath))
+                  {
+                        var script = await File.ReadAllTextAsync(scriptPath);
+                        await Database.ExecuteSqlRawAsync(script);
+                  }
+                  else
+                  {
+                        Console.Error.WriteLine("Failed to find SQL script for initializing database functions.");
+                  }
+            }
       }
 }
