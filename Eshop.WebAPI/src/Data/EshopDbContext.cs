@@ -315,7 +315,6 @@ namespace Eshop.WebApi.src.Data
                   });
             }
 
-
             public override int SaveChanges()
             {
                   var entities = from e in ChangeTracker.Entries()
@@ -333,15 +332,35 @@ namespace Eshop.WebApi.src.Data
 
             public async Task InitializeDatabaseAsync()
             {
-                  var scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "src/Data/SqlScripts", "review_functions.sql");
-                  if (File.Exists(scriptPath))
+                  var scriptsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "src/Data/SqlScripts");
+
+                  if (!Directory.Exists(scriptsDirectory))
                   {
-                        var script = await File.ReadAllTextAsync(scriptPath);
-                        await Database.ExecuteSqlRawAsync(script);
+                        Console.Error.WriteLine($"Directory not found: {scriptsDirectory}");
+                        return;
                   }
-                  else
+
+                  var scriptFiles = Directory.GetFiles(scriptsDirectory, "*.sql");
+
+                  foreach (var scriptFile in scriptFiles)
                   {
-                        Console.Error.WriteLine("Failed to find SQL script for initializing database functions.");
+                        if (File.Exists(scriptFile))
+                        {
+                              try
+                              {
+                                    var script = await File.ReadAllTextAsync(scriptFile);
+                                    await Database.ExecuteSqlRawAsync(script);
+                                    Console.WriteLine($"Successfully executed script: {scriptFile}");
+                              }
+                              catch (Exception ex)
+                              {
+                                    Console.Error.WriteLine($"Failed to execute script: {scriptFile}. Error: {ex.Message}");
+                              }
+                        }
+                        else
+                        {
+                              Console.Error.WriteLine($"Failed to find SQL script: {scriptFile}");
+                        }
                   }
             }
       }

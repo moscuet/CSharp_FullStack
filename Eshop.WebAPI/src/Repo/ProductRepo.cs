@@ -52,12 +52,16 @@ namespace Eshop.WebApi.src.Repo
                     await _images.AddRangeAsync(productImages);
                     await _context.SaveChangesAsync();
                 }
-
                 await transaction.CommitAsync();
 
-                Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(product)}");
+                var loadedProduct = await _products
+                            .Include(p => p.ProductLine)
+                            .Include(p => p.ProductSize)
+                            .Include(p => p.ProductColor)
+                            .Include(p => p.ProductImages)
+                            .FirstOrDefaultAsync(p => p.Id == product.Id);
 
-                return product;
+                return await _products.FirstOrDefaultAsync(p => p.Id == product.Id); ;
             }
             catch (Exception ex)
             {
@@ -69,8 +73,6 @@ namespace Eshop.WebApi.src.Repo
             }
         }
 
-
-
         public async Task<bool> UpdateAsync(Product product)
         {
             var existingProduct = await _products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == product.Id);
@@ -78,21 +80,32 @@ namespace Eshop.WebApi.src.Repo
             {
                 throw new KeyNotFoundException($"Product with ID {product.Id} not found.");
             }
+      Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(existingProduct)}");
+
 
             _context.Update(product);
+
+
             await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<Product> GetByIdAsync(Guid id)
         {
-            var product = await _products.FirstOrDefaultAsync(p => p.Id == id);
+            var product = await _products
+                .Include(p => p.ProductLine)
+                .Include(p => p.ProductSize)
+                .Include(p => p.ProductColor)
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (product == null)
             {
                 throw new KeyNotFoundException($"Product with ID {id} not found.");
             }
             return product;
         }
+
 
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
@@ -109,7 +122,22 @@ namespace Eshop.WebApi.src.Repo
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options)
         {
-            return await _products.ToListAsync();
+            var limit = options.Limit.HasValue ? options.Limit.Value.ToString() : "NULL";
+            var offset = options.StartingAfter.HasValue ? options.StartingAfter.Value.ToString() : "NULL";
+            var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
+            var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder}'";
+            var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
+
+            var sql = $"SELECT * FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey})";
+
+            var products = await _products.FromSqlRaw(sql)
+                .Include(p => p.ProductLine)
+                .Include(p => p.ProductSize)
+                .Include(p => p.ProductColor)
+                .Include(p => p.ProductImages)
+                .ToListAsync();
+
+            return products;
         }
 
     }

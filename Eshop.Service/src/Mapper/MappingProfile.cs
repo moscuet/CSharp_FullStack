@@ -41,8 +41,8 @@ public class MappingProfile : Profile
         CreateMap<ProductCreateDTO, Product>();
         CreateMap<ProductUpdateDTO, Product>()
             .ForMember(dest => dest.ProductLineId, opts => opts.Condition(src => src.ProductLineId.HasValue))
-            .ForMember(dest => dest.ProductSizeId, opts => opts.Condition(src => src.SizeId.HasValue))
-            .ForMember(dest => dest.ProductColorId, opts => opts.Condition(src => src.ColorId.HasValue))
+            .ForMember(dest => dest.ProductSizeId, opts => opts.Condition(src => src.ProductSizeId.HasValue))
+            .ForMember(dest => dest.ProductColorId, opts => opts.Condition(src => src.ProductColorId.HasValue))
             .ForMember(dest => dest.Inventory, opts => opts.Condition(src => src.Inventory.HasValue));
 
         // ProductLine mappings
@@ -79,9 +79,6 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ImageUrl, opts => opts.Condition(src => src.ImageUrl != null));
 
 
-
-
-
         // Custom mapping for ReviewCreateControllerDTO to ReviewCreateDTO
         CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>();
       CreateMap<ReviewCreateDTO, Review>()
@@ -89,11 +86,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Product, opt => opt.Ignore())
             .ForMember(dest => dest.ReviewImages, opt => opt.Ignore());
 
-
         CreateMap<Review, ReviewReadDTO>()
                    .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.ReviewImages));
-
-
 
         // ProductColor mappings
         CreateMap<ProductColor, ProductColorReadDTO>();

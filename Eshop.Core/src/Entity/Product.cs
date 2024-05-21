@@ -31,10 +31,8 @@ namespace Eshop.Core.src.Entity
         // Transient properties for demonstration purposes
         [NotMapped]
         public string ProductLineName => ProductLine?.Title;
-
         [NotMapped]
         public string ProductSizeValue => ProductSize?.Value;
-
         [NotMapped]
         public string ProductColorValue => ProductColor?.Value;
         public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();

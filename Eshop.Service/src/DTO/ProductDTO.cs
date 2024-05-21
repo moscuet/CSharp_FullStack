@@ -29,7 +29,7 @@ public class ProductReadDTO
 public class ProductUpdateDTO
 {
     public Guid? ProductLineId { get; set; }
-    public Guid? SizeId { get; set; }
-    public Guid? ColorId { get; set; }
+    public Guid? ProductSizeId { get; set; }
+    public Guid? ProductColorId { get; set; }
     public int? Inventory { get; set; }
 }
