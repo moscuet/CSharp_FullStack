@@ -82,9 +82,7 @@ namespace Eshop.WebApi.src.Repo
             }
       Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(existingProduct)}");
 
-
             _context.Update(product);
-
 
             await _context.SaveChangesAsync();
             return true;

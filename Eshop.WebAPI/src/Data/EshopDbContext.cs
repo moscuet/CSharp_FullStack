@@ -108,7 +108,6 @@ namespace Eshop.WebApi.src.Data
                            entity.Property(e => e.Title).IsRequired().HasMaxLength(100);
                            entity.HasIndex(e => e.Title).IsUnique();
                            entity.Property(e => e.Description).IsRequired().HasMaxLength(1080);
-                           entity.Property(e => e.Price).IsRequired().HasColumnType("decimal(18,2)");
                            entity.HasOne(e => e.Category)
                            .WithMany(c => c.ProductLines)
                            .HasForeignKey(e => e.CategoryId)
@@ -188,25 +187,17 @@ namespace Eshop.WebApi.src.Data
                   modelBuilder.Entity<Product>(entity =>
                   {
                         entity.ToTable("products");
-
                         entity.HasKey(e => e.Id);
-
-                        entity.Property(e => e.ProductLineId)
-            .IsRequired();
-
+                        entity.Property(e => e.ProductLineId).IsRequired();
                         entity.Property(e => e.ProductSizeId);
-
                         entity.Property(e => e.ProductColorId);
-
-                        entity.Property(e => e.Inventory)
-            .IsRequired()
-            .HasDefaultValue(0)
-            .HasComment("Inventory must not be a negative number");
+                        entity.Property(e => e.Inventory).IsRequired().HasDefaultValue(0).HasComment("Inventory must not be a negative number");
+                        entity.Property(e => e.Price).IsRequired().HasColumnType("decimal(18,2)");
 
                         entity.HasOne(e => e.ProductLine)
-            .WithMany(pl => pl.Products)
-            .HasForeignKey(e => e.ProductLineId)
-            .OnDelete(DeleteBehavior.Cascade);
+                  .WithMany(pl => pl.Products)
+                  .HasForeignKey(e => e.ProductLineId)
+                  .OnDelete(DeleteBehavior.Cascade);
 
                         entity.HasOne(e => e.ProductSize)
             .WithMany(ps => ps.Products)

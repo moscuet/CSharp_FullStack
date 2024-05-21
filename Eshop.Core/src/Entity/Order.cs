@@ -8,10 +8,10 @@ namespace Eshop.Core.src.Entity
     public class Order : BaseEntity
     {
         [Required]
-        public Guid UserId { get; private set; }
+        public Guid UserId { get; set; }
 
         [Required]
-        public Guid AddressId { get; private set; }
+        public Guid AddressId { get; set; }
 
         [Required]
         public OrderStatus Status { get; set; } = OrderStatus.Created;
@@ -29,27 +29,17 @@ namespace Eshop.Core.src.Entity
         [ForeignKey("UserId")]
         public User User { get; set; }
 
-        public Order() { }
-       
-        public Order(Guid userId, Guid addressId, OrderStatus status)
-        {
-            UserId = userId;
-            AddressId = addressId;
-            Status = status;
-        }
-
         public void AddItem(OrderItem item)
         {
             if (Status == OrderStatus.Completed || Status == OrderStatus.Cancelled)
             {
                 throw new InvalidOperationException("Cannot add items to an order that is completed or cancelled.");
             }
-
             Items.Add(item);
             RecalculateTotal();
         }
 
-        private void RecalculateTotal()
+        public void RecalculateTotal()
         {
             Total = Items.Sum(i => i.Price * i.Quantity);
         }

@@ -32,18 +32,21 @@ public class MappingProfile : Profile
              .ForMember(dest => dest.PhoneNumber, opts => opts.Condition(src => src.PhoneNumber != null));
 
         // Product mappings
-       CreateMap<Product, ProductReadDTO>()
-            .ForMember(dest => dest.ProductLineName, opt => opt.MapFrom(src => src.ProductLine.Title))
-            .ForMember(dest => dest.ProductSizeValue, opt => opt.MapFrom(src => src.ProductSize.Value))
-            .ForMember(dest => dest.ProductColorValue, opt => opt.MapFrom(src => src.ProductColor.Value))
-            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages));
+        CreateMap<Product, ProductReadDTO>()
+             .ForMember(dest => dest.ProductLineName, opt => opt.MapFrom(src => src.ProductLine.Title))
+             .ForMember(dest => dest.ProductSizeValue, opt => opt.MapFrom(src => src.ProductSize.Value))
+             .ForMember(dest => dest.ProductColorValue, opt => opt.MapFrom(src => src.ProductColor.Value))
+             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages));
+
 
         CreateMap<ProductCreateDTO, Product>();
         CreateMap<ProductUpdateDTO, Product>()
             .ForMember(dest => dest.ProductLineId, opts => opts.Condition(src => src.ProductLineId.HasValue))
             .ForMember(dest => dest.ProductSizeId, opts => opts.Condition(src => src.ProductSizeId.HasValue))
             .ForMember(dest => dest.ProductColorId, opts => opts.Condition(src => src.ProductColorId.HasValue))
-            .ForMember(dest => dest.Inventory, opts => opts.Condition(src => src.Inventory.HasValue));
+            .ForMember(dest => dest.Inventory, opts => opts.Condition(src => src.Inventory.HasValue))
+            .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price.HasValue));
+
 
         // ProductLine mappings
         CreateMap<ProductLine, ProductLineReadDTO>()
@@ -52,7 +55,6 @@ public class MappingProfile : Profile
         CreateMap<ProductLineUpdateDTO, ProductLine>()
             .ForMember(dest => dest.Title, opts => opts.Condition(src => src.Title != null))
             .ForMember(dest => dest.Description, opts => opts.Condition(src => src.Description != null))
-            .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price.HasValue))
             .ForMember(dest => dest.CategoryId, opts => opts.Condition(src => src.CategoryId.HasValue));
 
         // Order mappings
@@ -60,15 +62,11 @@ public class MappingProfile : Profile
         CreateMap<OrderCreateDTO, Order>();
         CreateMap<OrderUpdateDTO, Order>()
                     .ForMember(dest => dest.AddressId, opts => opts.Condition(src => src.AddressId.HasValue))
-                    .ForMember(dest => dest.Status, opts => opts.Condition(src => src.Status.HasValue))
-                    .ForMember(dest => dest.Total, opts => opts.Condition(src => src.Total.HasValue));
+                    .ForMember(dest => dest.Status, opts => opts.Condition(src => src.Status.HasValue));
 
         // OrderItem mappings
         CreateMap<OrderItem, OrderItemReadDTO>();
         CreateMap<OrderItemCreateDTO, OrderItem>();
-        CreateMap<OrderItemUpdateDTO, OrderItem>()
-                    .ForMember(dest => dest.Quantity, opts => opts.Condition(src => src.Quantity > 0))  // Ensure quantity is greater than 0
-                    .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price > 0)); // Ensure price is greater than 0
 
         // Category mappings
         CreateMap<Category, CategoryReadDTO>();
@@ -81,10 +79,10 @@ public class MappingProfile : Profile
 
         // Custom mapping for ReviewCreateControllerDTO to ReviewCreateDTO
         CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>();
-      CreateMap<ReviewCreateDTO, Review>()
-            .ForMember(dest => dest.User, opt => opt.Ignore())
-            .ForMember(dest => dest.Product, opt => opt.Ignore())
-            .ForMember(dest => dest.ReviewImages, opt => opt.Ignore());
+        CreateMap<ReviewCreateDTO, Review>()
+              .ForMember(dest => dest.User, opt => opt.Ignore())
+              .ForMember(dest => dest.Product, opt => opt.Ignore())
+              .ForMember(dest => dest.ReviewImages, opt => opt.Ignore());
 
         CreateMap<Review, ReviewReadDTO>()
                    .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.ReviewImages));

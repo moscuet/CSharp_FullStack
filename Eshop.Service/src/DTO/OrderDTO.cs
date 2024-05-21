@@ -21,7 +21,6 @@ public class OrderUpdateDTO
 {
     public Guid? AddressId { get; set; }
     public OrderStatus? Status { get; set; }
-    public decimal? Total { get; set; }
 }
 
 
@@ -29,7 +28,6 @@ public class OrderItemCreateDTO
 {
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }
-    public decimal Price { get; set; }
 }
 
 
@@ -41,8 +39,4 @@ public class OrderItemReadDTO
     public decimal Price { get; set; }
 }
 
-public class OrderItemUpdateDTO
-{
-    public int Quantity { get; set; }
-    public decimal Price { get; set; }
-}
+

@@ -18,6 +18,10 @@ namespace Eshop.Core.src.Entity
         [Range(0, int.MaxValue, ErrorMessage = "Inventory must not be a negative number")]
         public int Inventory { get; set; }
 
+        [Required, Column(TypeName = "decimal(18,2)")]
+        [Range(0, 9999999.99, ErrorMessage = "Price must be greater than or equal to 0 and less than or equal to 9999999.99")]
+        public decimal Price { get; set; }
+
         [JsonIgnore]
         [ForeignKey("ProductLineId")]
         public virtual ProductLine ProductLine { get; set; }

@@ -6,10 +6,9 @@ namespace Eshop.Core.src.Entity
     [Table("order_items")]
     public class OrderItem : BaseEntity
     {
-        public Guid? ProductId { get; set; }
-
-        [Required]
+         [Required]
         public Guid OrderId { get; set; } 
+        public Guid ProductId { get; set; }
 
         [Required, Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0")]
         public int Quantity { get; set; }
@@ -18,17 +17,11 @@ namespace Eshop.Core.src.Entity
         public decimal Price { get; set; }
 
         [ForeignKey("OrderId")]
-        public Order? Order { get; set; }
+        public Order Order { get; set; }
 
         [ForeignKey("ProductId")]
-        public Product? Product { get; set; }
-        public OrderItem() { }
-        public OrderItem(Guid? productId, Guid orderId, int quantity, decimal price)
-        {
-            ProductId = productId;
-            OrderId = orderId;
-            Quantity = quantity;
-            Price = price;
-        }
+        public Product Product { get; set; }
+        
     }
 }
+
