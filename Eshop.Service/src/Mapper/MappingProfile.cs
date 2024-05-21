@@ -84,9 +84,15 @@ public class MappingProfile : Profile
 
         // Custom mapping for ReviewCreateControllerDTO to ReviewCreateDTO
         CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>();
+      CreateMap<ReviewCreateDTO, Review>()
+            .ForMember(dest => dest.User, opt => opt.Ignore())
+            .ForMember(dest => dest.Product, opt => opt.Ignore())
+            .ForMember(dest => dest.ReviewImages, opt => opt.Ignore());
 
-        // Map from ReviewCreateDTO to Review
-        CreateMap<ReviewCreateDTO, Review>();
+
+        CreateMap<Review, ReviewReadDTO>()
+                   .ForMember(dest => dest.Images, opts => opts.MapFrom(src => src.ReviewImages));
+
 
 
         // ProductColor mappings

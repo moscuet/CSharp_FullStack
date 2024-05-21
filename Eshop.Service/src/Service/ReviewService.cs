@@ -24,7 +24,6 @@ namespace Eshop.Service.src.Service
         }
 
 
-
      public  async Task<Review>  ReviewCreateAsync(ReviewCreateDTO reviewCreateDto)
         {
             // Convert ReviewCreateDTO to Review entity
@@ -32,6 +31,7 @@ namespace Eshop.Service.src.Service
 
             // Log the DTO before creating the review
             Console.WriteLine($"004: {JsonSerializer.Serialize(reviewCreateDto)}");
+            
             Console.WriteLine($"005: {JsonSerializer.Serialize(review)}");
 
             // Create the review with images

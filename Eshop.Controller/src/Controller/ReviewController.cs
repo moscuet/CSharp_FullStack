@@ -44,10 +44,10 @@ namespace Eshop.Controller.src.Controllers
 
             // Create the review
             var createdReview = await _reviewService.ReviewCreateAsync(reviewDto);
-
+            
             Console.WriteLine($"From controller: reviewcraeted: {JsonSerializer.Serialize(createdReview)}\n");
 
-            return Ok(createdReview);
+            return Ok(_mapper.Map<ReviewReadDTO>(createdReview));
         }
 
 

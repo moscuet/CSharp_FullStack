@@ -228,49 +228,52 @@ namespace Eshop.WebApi.src.Data
             .HasForeignKey(r => r.ProductId);
                   });
 
+
+
                   // Review Configuration
                   modelBuilder.Entity<Review>(entity =>
-                  {
-                        entity.ToTable("reviews");
+      {
+            entity.ToTable("reviews");
 
-                        entity.HasKey(e => e.Id);
+            entity.HasKey(e => e.Id);
 
-                        entity.Property(e => e.UserId)
-            .IsRequired();
+            entity.Property(e => e.UserId)
+              .IsRequired();
 
-                        entity.Property(e => e.ProductId)
-            .IsRequired();
+            entity.Property(e => e.ProductId)
+              .IsRequired();
 
-                        entity.Property(e => e.Comment)
-            .IsRequired()
-            .HasMaxLength(1080);
+            entity.Property(e => e.Comment)
+              .IsRequired()
+              .HasMaxLength(1080);
 
-                        entity.Property(e => e.Rating)
-            .IsRequired()
-            .HasDefaultValue(1)
-            .HasComment("Rating must be between 1 and 5");
+            entity.Property(e => e.Rating)
+              .IsRequired()
+              .HasDefaultValue(1)
+              .HasComment("Rating must be between 1 and 5");
 
-                        entity.Property(e => e.IsAnonymous)
-            .IsRequired()
-            .HasDefaultValue(false);
+            entity.Property(e => e.IsAnonymous)
+              .IsRequired()
+              .HasDefaultValue(false);
 
-                        entity.HasOne(e => e.Product)
-            .WithMany(p => p.Reviews)
-            .HasForeignKey(e => e.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Product)
+              .WithMany(p => p.Reviews)
+              .HasForeignKey(e => e.ProductId)
+              .OnDelete(DeleteBehavior.Cascade);
 
-                        entity.HasOne(e => e.User)
-            .WithMany()
-            .HasForeignKey(e => e.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.User)
+              .WithMany()
+              .HasForeignKey(e => e.UserId)
+              .OnDelete(DeleteBehavior.Cascade);
 
-                        entity.HasMany(e => e.ReviewImages)
-            .WithOne(ri => ri.Review)
-            .HasForeignKey(ri => ri.ReviewId)
-            .OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(e => e.ReviewImages)
+              .WithOne(ri => ri.Review)
+              .HasForeignKey(ri => ri.ReviewId)
+              .OnDelete(DeleteBehavior.Cascade);
 
-                        entity.HasIndex(e => new { e.UserId, e.ProductId }).IsUnique(); // Composite unique key
-                  });
+            entity.HasIndex(e => new { e.UserId, e.ProductId }).IsUnique(); // Composite unique key
+      });
+
 
                   // ReviewImage Configuration
                   modelBuilder.Entity<ReviewImage>(entity =>

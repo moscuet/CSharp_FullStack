@@ -4,6 +4,7 @@ using Eshop.Core.src.Entity;
 using Eshop.Core.src.RepositoryAbstraction;
 using Eshop.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Eshop.WebApi.src.Repo
 {
@@ -26,53 +27,45 @@ namespace Eshop.WebApi.src.Repo
             return entity;
         }
 
-        public async Task<Review> CreateWithImagesAsync(Review review, List<string> imageUrls)
+
+     public async Task<Review> CreateWithImagesAsync(Review review, List<string> urls)
+{
+    using var transaction = await _context.Database.BeginTransactionAsync();
+    try
+    {
+        // Add the review
+        await _context.Reviews.AddAsync(review);
+        await _context.SaveChangesAsync();
+
+        // Add images associated with the review
+        if (urls != null && urls.Count > 0)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            var reviewImages = urls.Select(imageUrl => new ReviewImage
             {
-                // Add the review first
-                await _context.Reviews.AddAsync(review);
-                await _context.SaveChangesAsync();
+                ReviewId = review.Id,
+                Url = imageUrl
+            }).ToList();
 
-                Console.WriteLine($"\nReview saved with ID: {review.Id}\n");
-
-                var images = imageUrls.Select(url => new ReviewImage
-                {
-                    ReviewId = review.Id,
-                    Url = url
-                }).ToList();
-
-                await _context.AddRangeAsync(images);
-                await _context.SaveChangesAsync();
-
-                Console.WriteLine($"\nImages saved for review ID: {review.Id}\n");
-
-                await transaction.CommitAsync();
-
-                // Query to get all images connected with the review
-                var savedImages = await _context.ReviewImages
-                    .Where(i => i.ReviewId == review.Id)
-                    .ToListAsync();
-
-                Console.WriteLine($"\nSaved Images: {JsonSerializer.Serialize(savedImages)}\n");
-
-                // Reload the review to include the images
-                var updatedReview = await _context.Reviews
-                    .Include(r => r.ReviewImages)
-                    .FirstOrDefaultAsync(r => r.Id == review.Id);
-
-                Console.WriteLine($"\nFrom review repo: created review: {JsonSerializer.Serialize(updatedReview)}\n");
-
-                return updatedReview;
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync(); // Rollback the transaction in case of error
-                throw new Exception("An error occurred while creating the review with images.", ex);
-            }
+            await _context.ReviewImages.AddRangeAsync(reviewImages);
+            await _context.SaveChangesAsync();
         }
 
+        // Commit transaction
+        await transaction.CommitAsync();
+
+        // Return the review
+        return review;
+    }
+    catch (Exception ex)
+    {
+        // Attempt rollback if transaction is still active
+        if (transaction.GetDbTransaction().Connection != null)
+        {
+            await transaction.RollbackAsync();
+        }
+        throw new Exception("An error occurred while creating the review.", ex);
+    }
+}
 
 
 
@@ -132,19 +125,24 @@ namespace Eshop.WebApi.src.Repo
             return await _reviews.Where(r => r.UserId == userId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions options)
+        public Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions options)
         {
-            var limit = options.Limit.HasValue ? options.Limit.Value.ToString() : "NULL";
-            var offset = options.StartingAfter.HasValue ? options.StartingAfter.Value.ToString() : "NULL";
-            var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
-            var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder.ToString()}'";
-            var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
-
-            var sql = $"SELECT * FROM get_reviews({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey})";
-
-            var reviews = await _context.Reviews.FromSqlRaw(sql).ToListAsync();
-            return reviews;
+            throw new NotImplementedException();
         }
+
+        // public async Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions options)
+        // {
+        //     var limit = options.Limit.HasValue ? options.Limit.Value.ToString() : "NULL";
+        //     var offset = options.StartingAfter.HasValue ? options.StartingAfter.Value.ToString() : "NULL";
+        //     var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
+        //     var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder.ToString()}'";
+        //     var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
+
+        //     var sql = $"SELECT * FROM get_reviews({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey})";
+
+        //     var reviews = await _context.Reviews.FromSqlRaw(sql).ToListAsync();
+        //     return reviews;
+        // }
 
 
     }
