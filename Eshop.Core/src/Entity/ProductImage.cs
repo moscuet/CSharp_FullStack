@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Eshop.Core.src.Entity
 {
@@ -13,6 +14,7 @@ namespace Eshop.Core.src.Entity
         [Required, MaxLength(2048)]
         public string Url { get; set; }
 
+        [JsonIgnore]
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
     }

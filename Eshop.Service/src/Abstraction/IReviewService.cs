@@ -10,7 +10,6 @@ namespace Eshop.Service.src.ServiceAbstraction
         Task<IEnumerable<ReviewReadDTO>> GetReviewsByProductIdAsync(Guid productId);
         Task<IEnumerable<ReviewReadDTO>> GetReviewsByUserIdAsync(Guid userId);
         Task<IEnumerable<ReviewReadDTO>> GetAllReviewsAsync(QueryOptions options);
-
     }
 }
 

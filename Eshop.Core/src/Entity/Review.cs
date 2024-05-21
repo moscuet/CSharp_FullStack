@@ -29,7 +29,6 @@ public class Review : BaseEntity
  [JsonIgnore]
   [ForeignKey("UserId")]
   public virtual User User { get; set; }
-
         public virtual ICollection<ReviewImage> ReviewImages { get; set; } = new List<ReviewImage>();
 }
 

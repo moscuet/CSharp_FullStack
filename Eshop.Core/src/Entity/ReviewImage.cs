@@ -15,6 +15,5 @@ namespace Eshop.Core.src.Entity
         [JsonIgnore]
         [ForeignKey("ReviewId")]
         public virtual Review Review { get; set; }
-
     }
 }

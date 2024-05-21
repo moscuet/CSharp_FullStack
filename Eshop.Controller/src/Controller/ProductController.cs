@@ -1,4 +1,5 @@
 using Eshop.Core.src.Common;
+using Eshop.Core.src.Entity;
 using Eshop.Service.src.DTO;
 using Eshop.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
@@ -21,11 +22,13 @@ namespace Eshop.Controller.src.Controllers
         // POST: Create a new product
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<ProductReadDTO>> CreateAsync([FromBody] ProductCreateDTO productDto)
+        public async Task<ActionResult<Product>> CreateAsync([FromBody] ProductCreateDTO productDto)
         {
-            var createdProduct = await _productService.CreateAsync(productDto);
+            var createdProduct = await _productService.ProductCreateAsync(productDto);
             return Ok(createdProduct);
         }
+
+         
 
         // GET: Get product by ID
         [AllowAnonymous]

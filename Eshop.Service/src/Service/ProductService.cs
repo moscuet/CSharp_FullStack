@@ -17,6 +17,14 @@ namespace Eshop.Service.src.Service
             _productRepository = productRepository;
         }
 
+
+      public  async Task<Product>  ProductCreateAsync(ProductCreateDTO productCreateDto)
+        {
+            var product = _mapper.Map<Product>(productCreateDto);
+            var createdProduct = await _productRepository.CreateWithImagesAsync(product, productCreateDto.ImageUrls);
+            return createdProduct;
+        }
+
         public async Task<IEnumerable<ProductReadDTO>> GetAllProductsAsync(QueryOptions? options)
         {
             var products = await _productRepository.GetAllProductsAsync(options);
