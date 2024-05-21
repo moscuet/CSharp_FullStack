@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.Entity;
 using Eshop.Core.src.RepositoryAbstraction;
@@ -126,7 +125,7 @@ namespace Eshop.WebApi.src.Repo
 
             var sql = $"SELECT * FROM get_reviews({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey})";
 
-            var reviews = await _reviews.FromSqlRaw(sql).ToListAsync();
+            var reviews = await _reviews.FromSqlRaw(sql).Include(r => r.ReviewImages).ToListAsync();
             
             return reviews;
         }
