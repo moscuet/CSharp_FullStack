@@ -16,11 +16,12 @@ using DotNetEnv;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
+
 Env.Load();
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? throw new InvalidOperationException("Database connection string 'DATABASE_URL' not found.");
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new InvalidOperationException("JWT Key is not set.");
 var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT Issuer is not set.");
-
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080"; 
 Console.WriteLine($"Database URL: {databaseUrl}"); 
 // Parse the DATABASE_URL
 var databaseUri = new Uri(databaseUrl);
@@ -33,6 +34,9 @@ var connectionString = new NpgsqlConnectionStringBuilder
     Password = userInfo[1],
     Database = databaseUri.LocalPath.TrimStart('/')
 }.ToString();
+
+Console.WriteLine($"Database URL: {databaseUrl}");
+Console.WriteLine($"Connecting to database at {databaseUri.Host}:{databaseUri.Port}");
 
 
 // Configure services...
@@ -107,5 +111,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
 
+Console.WriteLine($"Starting application on port {port}");
+app.Run($"http://0.0.0.0:{port}"); 
