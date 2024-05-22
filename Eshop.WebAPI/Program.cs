@@ -113,4 +113,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 Console.WriteLine($"Starting application on port {port}");
-app.Run($"http://0.0.0.0:{port}"); 
+app.Run($"http://0.0.0.0"); 
