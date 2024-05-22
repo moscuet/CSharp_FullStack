@@ -21,10 +21,10 @@ Env.Load();
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? throw new InvalidOperationException("Database connection string 'DATABASE_URL' not found.");
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new InvalidOperationException("JWT Key is not set.");
 var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT Issuer is not set.");
-var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080"; 
-var Host = Environment.GetEnvironmentVariable("HOST") ?? "0.0.0.0"; 
+var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+var Host = Environment.GetEnvironmentVariable("HOST") ?? "0.0.0.0";
 
-Console.WriteLine($"Database URL: {databaseUrl}"); 
+Console.WriteLine($"Database URL: {databaseUrl}");
 // Parse the DATABASE_URL
 var databaseUri = new Uri(databaseUrl);
 var userInfo = databaseUri.UserInfo.Split(':');
@@ -70,6 +70,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Register CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 // Service registration
 builder.Services.AddScoped<IUserRepository, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -120,4 +130,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 Console.WriteLine($"Starting application on port {Port}");
-app.Run($"http://0.0.0.0:{Port}"); 
+app.Run($"http://0.0.0.0:{Port}");
