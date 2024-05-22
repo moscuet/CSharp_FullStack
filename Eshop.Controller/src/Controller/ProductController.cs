@@ -28,8 +28,6 @@ namespace Eshop.Controller.src.Controllers
             return Ok(createdProduct);
         }
 
-         
-
         // GET: Get product by ID
         [AllowAnonymous]
         [HttpGet("{id}")]

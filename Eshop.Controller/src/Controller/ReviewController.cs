@@ -22,15 +22,15 @@ namespace Eshop.Controller.src.Controllers
         }
 
         // POST: Create a new review
-       [Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ReviewReadDTO>> CreateAsync([FromBody] ReviewCreateDTO reviewDto)
         {
             var (userId, _) = UserContextHelper.GetUserClaims(HttpContext);
-            
+
             reviewDto.UserId = userId.Value;
             var createdReview = await _reviewService.ReviewCreateAsync(reviewDto);
-            
+
             return Ok(_mapper.Map<ReviewReadDTO>(createdReview));
         }
 
