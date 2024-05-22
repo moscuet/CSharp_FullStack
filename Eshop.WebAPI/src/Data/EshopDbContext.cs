@@ -126,16 +126,16 @@ namespace Eshop.WebApi.src.Data
                   {
                         entity.Property(e => e.Value).IsRequired();
                         entity.HasMany(e => e.Products)
-                .WithOne(p => p.ProductSize)
-                .HasForeignKey(p => p.ProductSizeId);
+                        .WithOne(p => p.ProductSize)
+                        .HasForeignKey(p => p.ProductSizeId);
                   });
 
                   // ProductColor Configuration
                   modelBuilder.Entity<ProductColor>(entity =>
                   {
                         entity.HasMany(e => e.Products)
-                .WithOne(p => p.ProductColor)
-                .HasForeignKey(p => p.ProductColorId);
+                        .WithOne(p => p.ProductColor)
+                        .HasForeignKey(p => p.ProductColorId);
                   });
 
 
@@ -195,75 +195,75 @@ namespace Eshop.WebApi.src.Data
                         entity.Property(e => e.Price).IsRequired().HasColumnType("decimal(18,2)");
 
                         entity.HasOne(e => e.ProductLine)
-                  .WithMany(pl => pl.Products)
-                  .HasForeignKey(e => e.ProductLineId)
-                  .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany(pl => pl.Products)
+                        .HasForeignKey(e => e.ProductLineId)
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                        entity.HasOne(e => e.ProductSize)
-            .WithMany(ps => ps.Products)
-            .HasForeignKey(e => e.ProductSizeId)
-            .OnDelete(DeleteBehavior.SetNull);
+                                    entity.HasOne(e => e.ProductSize)
+                        .WithMany(ps => ps.Products)
+                        .HasForeignKey(e => e.ProductSizeId)
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                        entity.HasOne(e => e.ProductColor)
-            .WithMany(pc => pc.Products)
-            .HasForeignKey(e => e.ProductColorId)
-            .OnDelete(DeleteBehavior.SetNull);
+                                    entity.HasOne(e => e.ProductColor)
+                        .WithMany(pc => pc.Products)
+                        .HasForeignKey(e => e.ProductColorId)
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                        entity.HasMany(e => e.ProductImages)
-            .WithOne(pi => pi.Product)
-            .HasForeignKey(pi => pi.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
+                                    entity.HasMany(e => e.ProductImages)
+                        .WithOne(pi => pi.Product)
+                        .HasForeignKey(pi => pi.ProductId)
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                        entity.HasMany(e => e.Reviews)
-            .WithOne(r => r.Product)
-            .HasForeignKey(r => r.ProductId);
+                                    entity.HasMany(e => e.Reviews)
+                        .WithOne(r => r.Product)
+                        .HasForeignKey(r => r.ProductId);
                   });
 
 
 
                   // Review Configuration
                   modelBuilder.Entity<Review>(entity =>
-      {
-            entity.ToTable("reviews");
+                 {
+                       entity.ToTable("reviews");
 
-            entity.HasKey(e => e.Id);
+                       entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.UserId)
-              .IsRequired();
+                       entity.Property(e => e.UserId)
+                         .IsRequired();
 
-            entity.Property(e => e.ProductId)
-              .IsRequired();
+                       entity.Property(e => e.ProductId)
+                         .IsRequired();
 
-            entity.Property(e => e.Comment)
-              .IsRequired()
-              .HasMaxLength(1080);
+                       entity.Property(e => e.Comment)
+                         .IsRequired()
+                         .HasMaxLength(1080);
 
-            entity.Property(e => e.Rating)
-              .IsRequired()
-              .HasDefaultValue(1)
-              .HasComment("Rating must be between 1 and 5");
+                       entity.Property(e => e.Rating)
+                         .IsRequired()
+                         .HasDefaultValue(1)
+                         .HasComment("Rating must be between 1 and 5");
 
-            entity.Property(e => e.IsAnonymous)
-              .IsRequired()
-              .HasDefaultValue(false);
+                       entity.Property(e => e.IsAnonymous)
+                         .IsRequired()
+                         .HasDefaultValue(false);
 
-            entity.HasOne(e => e.Product)
-              .WithMany(p => p.Reviews)
-              .HasForeignKey(e => e.ProductId)
-              .OnDelete(DeleteBehavior.Cascade);
+                       entity.HasOne(e => e.Product)
+                         .WithMany(p => p.Reviews)
+                         .HasForeignKey(e => e.ProductId)
+                         .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(e => e.User)
-              .WithMany()
-              .HasForeignKey(e => e.UserId)
-              .OnDelete(DeleteBehavior.Cascade);
+                       entity.HasOne(e => e.User)
+                         .WithMany()
+                         .HasForeignKey(e => e.UserId)
+                         .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasMany(e => e.ReviewImages)
-              .WithOne(ri => ri.Review)
-              .HasForeignKey(ri => ri.ReviewId)
-              .OnDelete(DeleteBehavior.Cascade);
+                       entity.HasMany(e => e.ReviewImages)
+                         .WithOne(ri => ri.Review)
+                         .HasForeignKey(ri => ri.ReviewId)
+                         .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasIndex(e => new { e.UserId, e.ProductId }).IsUnique(); // Composite unique key
-      });
+                       entity.HasIndex(e => new { e.UserId, e.ProductId }).IsUnique(); // Composite unique key
+                 });
 
                   // ReviewImage Configuration
                   modelBuilder.Entity<ReviewImage>(entity =>

@@ -58,6 +58,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CategoryId, opts => opts.Condition(src => src.CategoryId.HasValue));
 
         // Order mappings
+        CreateMap<OrderCreateControllerDTO, OrderCreateDTO >();
         CreateMap<Order, OrderReadDTO>();
         CreateMap<OrderCreateDTO, Order>();
         CreateMap<OrderUpdateDTO, Order>()

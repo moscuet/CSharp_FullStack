@@ -1,12 +1,18 @@
 using Eshop.Core.src.ValueObject;
 
 namespace Eshop.Service.src.DTO;
+public class OrderCreateControllerDTO
+{
+    public Guid AddressId { get; set; }
+    public List<OrderItemCreateDTO> Items { get; set; }
+}
+
+
 public class OrderCreateDTO
 {
     public Guid UserId { get; set; }
     public Guid AddressId { get; set; }
     public List<OrderItemCreateDTO> Items { get; set; }
-
 }
 
 public class OrderReadDTO
