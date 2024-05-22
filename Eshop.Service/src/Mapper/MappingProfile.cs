@@ -78,7 +78,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ImageUrl, opts => opts.Condition(src => src.ImageUrl != null));
 
 
-        // Custom mapping for ReviewCreateControllerDTO to ReviewCreateDTO
+        // Review mappings
         CreateMap<ReviewCreateControllerDTO, ReviewCreateDTO>();
         CreateMap<ReviewCreateDTO, Review>()
               .ForMember(dest => dest.User, opt => opt.Ignore())
