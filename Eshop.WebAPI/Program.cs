@@ -107,7 +107,12 @@ using (var scope = app.Services.CreateScope())
 
 // Configure middlewares...
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Eshop API V1");
+    c.RoutePrefix = string.Empty;
+});
+
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
