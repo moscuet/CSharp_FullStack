@@ -1,6 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Eshop.Core.src.Entity;
 using Eshop.Core.src.ValueObject;
+using Eshop.Service.src.ServiceAbstraction;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eshop.WebApi.src.Data
@@ -9,6 +13,7 @@ namespace Eshop.WebApi.src.Data
       {
             protected readonly IConfiguration _config;
             private readonly ILoggerFactory _loggerFactory;
+            private readonly IPasswordService _passwordService;
 
             public DbSet<User>? Users { get; set; }
             public DbSet<Category>? Categories { get; set; }
@@ -32,10 +37,12 @@ namespace Eshop.WebApi.src.Data
                   AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
                   AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             }
-            public EshopDbContext(DbContextOptions options, IConfiguration config, ILoggerFactory loggerFactory) : base(options)
+            public EshopDbContext(DbContextOptions options, IConfiguration config, ILoggerFactory loggerFactory, IPasswordService passwordService) : base(options)
             {
                   _config = config;
                   _loggerFactory = loggerFactory;
+                  _passwordService = passwordService;
+
             }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -54,7 +61,7 @@ namespace Eshop.WebApi.src.Data
                   modelBuilder.HasPostgresEnum<SortBy>();
                   modelBuilder.HasPostgresEnum<SortOrder>();
                   modelBuilder.HasPostgresEnum<TokenType>();
-                  
+
                   modelBuilder.Entity<User>(entity =>
                   {
                         entity.Property(e => e.FirstName).IsRequired().HasMaxLength(50);
@@ -196,24 +203,24 @@ namespace Eshop.WebApi.src.Data
                         .HasForeignKey(e => e.ProductLineId)
                         .OnDelete(DeleteBehavior.Cascade);
 
-                                    entity.HasOne(e => e.ProductSize)
-                        .WithMany(ps => ps.Products)
-                        .HasForeignKey(e => e.ProductSizeId)
-                        .OnDelete(DeleteBehavior.SetNull);
+                        entity.HasOne(e => e.ProductSize)
+            .WithMany(ps => ps.Products)
+            .HasForeignKey(e => e.ProductSizeId)
+            .OnDelete(DeleteBehavior.SetNull);
 
-                                    entity.HasOne(e => e.ProductColor)
-                        .WithMany(pc => pc.Products)
-                        .HasForeignKey(e => e.ProductColorId)
-                        .OnDelete(DeleteBehavior.SetNull);
+                        entity.HasOne(e => e.ProductColor)
+            .WithMany(pc => pc.Products)
+            .HasForeignKey(e => e.ProductColorId)
+            .OnDelete(DeleteBehavior.SetNull);
 
-                                    entity.HasMany(e => e.ProductImages)
-                        .WithOne(pi => pi.Product)
-                        .HasForeignKey(pi => pi.ProductId)
-                        .OnDelete(DeleteBehavior.Cascade);
+                        entity.HasMany(e => e.ProductImages)
+            .WithOne(pi => pi.Product)
+            .HasForeignKey(pi => pi.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-                                    entity.HasMany(e => e.Reviews)
-                        .WithOne(r => r.Product)
-                        .HasForeignKey(r => r.ProductId);
+                        entity.HasMany(e => e.Reviews)
+            .WithOne(r => r.Product)
+            .HasForeignKey(r => r.ProductId);
                   });
 
 
@@ -351,5 +358,79 @@ namespace Eshop.WebApi.src.Data
                         }
                   }
             }
+
+
+            public async Task SeedDataAsync()
+            {
+                  var seedingPath = Path.Combine(Directory.GetCurrentDirectory(), "src/Data/DataSeeding");
+                  if (!Directory.Exists(seedingPath))
+                  {
+                        Console.Error.WriteLine($"Seeding directory not found: {seedingPath}");
+                        return;
+                  }
+
+                  await SeedTableFromCsv<User>(seedingPath, "users.csv", Users);
+            }
+
+            private async Task SeedTableFromCsv<T>(string seedingPath, string fileName, DbSet<T> dbSet) where T : class
+            {
+                  var filePath = Path.Combine(seedingPath, fileName);
+                  if (!File.Exists(filePath))
+                  {
+                        Console.Error.WriteLine($"CSV file not found: {filePath}");
+                        return;
+                  }
+
+                  using var reader = new StreamReader(filePath);
+                  using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+                  {
+                        HeaderValidated = null,
+                        MissingFieldFound = null
+                  });
+
+                  var map = new DefaultClassMap<T>();
+                  map.MapSnakeCase();
+                  csv.Context.RegisterClassMap(map);
+
+                  var records = csv.GetRecords<T>().ToList();
+
+                  foreach (var record in records)
+                  {
+                        var idProperty = typeof(T).GetProperty("Id");
+                        if (idProperty == null)
+                        {
+                              Console.Error.WriteLine($"No Id property found on type {typeof(T).Name}");
+                              continue;
+                        }
+
+                        var id = idProperty.GetValue(record);
+                        if (id == null)
+                        {
+                              Console.Error.WriteLine($"No Id value found for record in type {typeof(T).Name}");
+                              continue;
+                        }
+
+                        if (typeof(T) == typeof(User))
+                        {
+                              var user = record as User;
+                              if (user != null)
+                              {
+                                    byte[] salt;
+                                    user.Password = _passwordService.HashPassword(user.Password, out salt);
+                                    user.Salt = salt;
+                              }
+                        }
+
+                        if (!await dbSet.AnyAsync(e => EF.Property<object>(e, "Id").Equals(id)))
+                        {
+                              await dbSet.AddAsync(record);
+                        }
+                  }
+
+                  await SaveChangesAsync();
+            }
+
+
+
       }
 }
