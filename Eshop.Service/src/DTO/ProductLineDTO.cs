@@ -13,6 +13,8 @@ namespace Eshop.Service.src.DTO
         public string Description { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
+         public List<string> ImageUrls { get; set; } = new List<string>();
+        public List<ProductReadDTO> Products { get; set; } = new List<ProductReadDTO>();
     }
 
     public class ProductLineUpdateDTO

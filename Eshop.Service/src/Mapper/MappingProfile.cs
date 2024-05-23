@@ -47,18 +47,18 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Inventory, opts => opts.Condition(src => src.Inventory.HasValue))
             .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price.HasValue));
 
-
         // ProductLine mappings
         CreateMap<ProductLine, ProductLineReadDTO>()
-            .ForMember(dest => dest.CategoryName, opts => opts.MapFrom(src => src.Category.Name));
-        CreateMap<ProductLineCreateDTO, ProductLine>();
+       .ForMember(dest => dest.CategoryName, opts => opts.MapFrom(src => src.Category.Name))
+       .ForMember(dest => dest.Products, opts => opts.MapFrom(src => src.Products))
+       .ForMember(dest => dest.ImageUrls, opts => opts.MapFrom(src => src.Products.SelectMany(p => p.ProductImages).Select(img => img.Url).Distinct()));
         CreateMap<ProductLineUpdateDTO, ProductLine>()
-            .ForMember(dest => dest.Title, opts => opts.Condition(src => src.Title != null))
-            .ForMember(dest => dest.Description, opts => opts.Condition(src => src.Description != null))
-            .ForMember(dest => dest.CategoryId, opts => opts.Condition(src => src.CategoryId.HasValue));
+                .ForMember(dest => dest.Title, opts => opts.Condition(src => src.Title != null))
+                .ForMember(dest => dest.Description, opts => opts.Condition(src => src.Description != null))
+                .ForMember(dest => dest.CategoryId, opts => opts.Condition(src => src.CategoryId.HasValue));
 
         // Order mappings
-        CreateMap<OrderCreateControllerDTO, OrderCreateDTO >();
+        CreateMap<OrderCreateControllerDTO, OrderCreateDTO>();
         CreateMap<Order, OrderReadDTO>();
         CreateMap<OrderCreateDTO, Order>();
         CreateMap<OrderUpdateDTO, Order>()

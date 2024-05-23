@@ -54,10 +54,7 @@ namespace Eshop.WebApi.src.Data
                   modelBuilder.HasPostgresEnum<SortBy>();
                   modelBuilder.HasPostgresEnum<SortOrder>();
                   modelBuilder.HasPostgresEnum<TokenType>();
-                  modelBuilder.HasPostgresEnum<ColorValue>();
-                  modelBuilder.HasPostgresEnum<EntityType>();
-
-
+                  
                   modelBuilder.Entity<User>(entity =>
                   {
                         entity.Property(e => e.FirstName).IsRequired().HasMaxLength(50);

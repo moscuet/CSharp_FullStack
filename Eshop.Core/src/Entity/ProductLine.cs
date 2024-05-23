@@ -15,10 +15,13 @@ namespace Eshop.Core.src.Entity
         [Required]
         public Guid CategoryId { get; set; }
 
-        // Navigation property
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-    }
+
+        public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+       }
 }
