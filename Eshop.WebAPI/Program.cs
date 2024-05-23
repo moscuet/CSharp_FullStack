@@ -17,11 +17,13 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load();
+var localConnectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
+
+ Env.Load();
 // var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? throw new InvalidOperationException("Database connection string 'DATABASE_URL' not found.");
  var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new InvalidOperationException("JWT Key is not set.");
 var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT Issuer is not set.");
-var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+// var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 // var Host = Environment.GetEnvironmentVariable("HOST") ?? "0.0.0.0";
 
 // // Parse the DATABASE_URL
@@ -45,10 +47,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-var connectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
-
 builder.Services.AddDbContext<EshopDbContext>(
-    options => options.UseNpgsql(connectionString)
+    options => options.UseNpgsql(localConnectionString)
                       .UseSnakeCaseNamingConvention()
                       .AddInterceptors(new TimeStampInterceptor()));
 
@@ -111,16 +111,21 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<EshopDbContext>();
     dbContext.Database.Migrate();
-     await dbContext.SeedDataAsync();
+    await dbContext.SeedDataAsync();
 }
 
-// Configure middlewares...
+// // Configure middlewares...
+// app.UseSwagger();
+// app.UseSwaggerUI(c =>
+// {
+//     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Eshop API V1");
+//     c.RoutePrefix = string.Empty;
+// });
+
+
+
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Eshop API V1");
-    c.RoutePrefix = string.Empty;
-});
+app.UseSwaggerUI();
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
@@ -128,4 +133,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-app.Run($"http://0.0.0.0:{Port}");
+// app.Run($"http://0.0.0.0:{Port}");
