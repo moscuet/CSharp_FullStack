@@ -24,7 +24,6 @@ var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new Inval
 var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 var Host = Environment.GetEnvironmentVariable("HOST") ?? "0.0.0.0";
 
-Console.WriteLine($"Database URL: {databaseUrl}");
 // Parse the DATABASE_URL
 var databaseUri = new Uri(databaseUrl);
 var userInfo = databaseUri.UserInfo.Split(':');
@@ -36,10 +35,6 @@ var connectionString = new NpgsqlConnectionStringBuilder
     Password = userInfo[1],
     Database = databaseUri.LocalPath.TrimStart('/')
 }.ToString();
-
-Console.WriteLine($"Database URL: {databaseUrl}");
-Console.WriteLine($"Connecting to database at {databaseUri.Host}:{databaseUri.Port}");
-
 
 // Configure services...
 builder.Services.AddEndpointsApiExplorer();
@@ -80,6 +75,7 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+
 // Service registration
 builder.Services.AddScoped<IUserRepository, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -129,5 +125,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-Console.WriteLine($"Starting application on port {Port}");
 app.Run($"http://0.0.0.0:{Port}");
