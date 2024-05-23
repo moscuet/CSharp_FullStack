@@ -17,7 +17,7 @@ namespace Eshop.WebApi.src.Repo
         {
             _context = context;
             _products = _context.Products;
-            _orders = _orders;
+            _orders = _context.Orders; 
         }
         public async Task<Order> CreateAsync(Order order)
         {
