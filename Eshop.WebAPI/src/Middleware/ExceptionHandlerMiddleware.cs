@@ -21,13 +21,13 @@ namespace Eshop.WebApi.src.middleware
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogError( @"Unauthorized access error occurred: {Message}", ex.Message);
+                _logger.LogError( $"Unauthorized access error occurred: {ex.Message}");
 
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 await context.Response.WriteAsJsonAsync(new
                 {
-                    StatusCode = context.Response.StatusCode,
-                    Message = @"Access denied:{ex.Message}",
+                    context.Response.StatusCode,
+                    Message = $"Access denied:{ex.Message}"
                 });
             }
             catch (DbUpdateException dbEx)
