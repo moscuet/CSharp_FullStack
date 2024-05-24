@@ -22,6 +22,7 @@ public class ProductReadDTO
     public int Inventory { get; set; }
     public decimal Price { get; set; }
     public IEnumerable<ProductImage> Images { get; set; }
+    public IEnumerable<Review> Reviewss { get; set; }
     public string ProductLineName { get; set; }
     public string ProductSizeValue { get; set; }
     public string ProductColorValue { get; set; }
