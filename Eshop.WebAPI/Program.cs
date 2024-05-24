@@ -22,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
  Env.Load();
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new InvalidOperationException("JWT Key is not set.");
 var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT Issuer is not set.");
-//   var connectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
+//var connectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
 
 
 // Parse the DATABASE_URL
@@ -136,3 +136,4 @@ app.MapControllers();
 app.Run($"http://0.0.0.0:{Port}");
 
 
+//app.Run();

@@ -64,7 +64,6 @@ namespace Eshop.Controller.src.Controllers
         }
 
         // GET: Get all product lines
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductLineReadDTO>>> GetAllProductLinesAsync([FromQuery] QueryOptions options)
         {

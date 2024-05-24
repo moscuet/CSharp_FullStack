@@ -42,7 +42,7 @@ namespace Eshop.Controller.src.Controllers
 
         // GET: Get all products
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("")]
         public async Task<ActionResult<IEnumerable<ProductReadDTO>>> GetAllProductsAsync([FromQuery] QueryOptions? options)
         {
             var products = await _productService.GetAllProductsAsync(options);
