@@ -18,28 +18,27 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//var localConnectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
 
  Env.Load();
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new InvalidOperationException("JWT Key is not set.");
 var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT Issuer is not set.");
- var connectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
+//  var connectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
 
 
-// // Parse the DATABASE_URL
-// var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-// var Host = Environment.GetEnvironmentVariable("HOST") ?? "0.0.0.0";
-// var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? throw new InvalidOperationException("Database connection string 'DATABASE_URL' not found.");
-// var databaseUri = new Uri(databaseUrl);
-// var userInfo = databaseUri.UserInfo.Split(':');
-// var connectionString = new NpgsqlConnectionStringBuilder
-// {
-//     Host = databaseUri.Host,
-//     Port = databaseUri.Port,
-//     Username = userInfo[0],
-//     Password = userInfo[1],
-//     Database = databaseUri.LocalPath.TrimStart('/')
-// }.ToString();
+// Parse the DATABASE_URL
+var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+var Host = Environment.GetEnvironmentVariable("HOST") ?? "0.0.0.0";
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? throw new InvalidOperationException("Database connection string 'DATABASE_URL' not found.");
+var databaseUri = new Uri(databaseUrl);
+var userInfo = databaseUri.UserInfo.Split(':');
+var connectionString = new NpgsqlConnectionStringBuilder
+{
+    Host = databaseUri.Host,
+    Port = databaseUri.Port,
+    Username = userInfo[0],
+    Password = userInfo[1],
+    Database = databaseUri.LocalPath.TrimStart('/')
+}.ToString();
 
 
 // Configure services...
@@ -134,7 +133,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run();
-// app.Run($"http://0.0.0.0:{Port}");
+// app.Run();
+app.Run($"http://0.0.0.0:{Port}");
 
 
