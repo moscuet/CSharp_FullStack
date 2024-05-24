@@ -5,6 +5,7 @@ using System.Text;
 using Eshop.Core.src.Entity;
 using Eshop.Core.src.ValueObject;
 using Eshop.Service.src.ServiceAbstraction;
+using DotNetEnv;
 
 namespace Eshop.WebApi.src.Service
 {
@@ -15,6 +16,7 @@ namespace Eshop.WebApi.src.Service
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
+            Env.Load();
         }
 
         public string GenerateToken(User user, TokenType type)
@@ -25,9 +27,8 @@ namespace Eshop.WebApi.src.Service
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Role, user.UserRole.ToString()),
             };
-
-            var jwtKey = _configuration["Secrets:JwtKey"];
-
+             
+            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ;
             if (jwtKey is null)
             {
                 throw new ArgumentNullException(
