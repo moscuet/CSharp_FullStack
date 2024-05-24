@@ -418,19 +418,27 @@ namespace Eshop.WebApi.src.Data
                                     byte[] salt;
                                     user.Password = _passwordService.HashPassword(user.Password, out salt);
                                     user.Salt = salt;
+                                    if (await dbSet.AnyAsync(e => EF.Property<string>(e, "Email") == user.Email))
+                                    {
+                                          Console.Error.WriteLine($"Duplicate email found: {user.Email}");
+                                          continue;
+                                    }
                               }
                         }
 
-                        if (!await dbSet.AnyAsync(e => EF.Property<object>(e, "Id").Equals(id)))
+                        try
                         {
-                              await dbSet.AddAsync(record);
+                              if (!await dbSet.AnyAsync(e => EF.Property<object>(e, "Id").Equals(id)))
+                              {
+                                    await dbSet.AddAsync(record);
+                              }
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                              Console.Error.WriteLine($"Error adding record with Id {id}: {ex.Message}");
                         }
                   }
-
                   await SaveChangesAsync();
             }
-
-
-
       }
 }

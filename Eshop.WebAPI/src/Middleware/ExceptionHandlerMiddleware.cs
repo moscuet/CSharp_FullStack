@@ -4,7 +4,7 @@ using Eshop.Core.src.Common;
 
 namespace Eshop.WebApi.src.middleware
 {
-    public class ExceptionHandlerMiddleware : IMiddleware
+   public class ExceptionHandlerMiddleware : IMiddleware
     {
         private readonly ILogger<ExceptionHandlerMiddleware> _logger;
 
@@ -19,36 +19,51 @@ namespace Eshop.WebApi.src.middleware
             {
                 await next(context);
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogError( @"Unauthorized access error occurred: {Message}", ex.Message);
+
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = @"Access denied:{ex.Message}",
+                });
+            }
             catch (DbUpdateException dbEx)
             {
                 _logger.LogError(dbEx, "Database update error occurred.");
 
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-              
-                var errorMessage = new
+                await context.Response.WriteAsJsonAsync(new
                 {
-                    StatusCode = context.Response.StatusCode,
-                    Message = $"A database error occurred: {dbEx.InnerException?.Message ?? dbEx.Message}. Please check your input or try again later."
-                };
-
-                await context.Response.WriteAsJsonAsync(errorMessage);
+                    context.Response.StatusCode,
+                    Message = $"A database error occurred. Please check your input or try again later.",
+                    Error = dbEx.InnerException?.Message ?? dbEx.Message 
+                });
             }
             catch (AppException appEx)
             {
-                _logger.LogError(appEx, $"Application-specific error: {appEx.ErrorMessage}");
+                _logger.LogError(appEx.ErrorMessage, "Application-specific error occurred.");
 
                 context.Response.StatusCode = (int)appEx.StatusCode;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = appEx.ErrorMessage };
-                await context.Response.WriteAsJsonAsync(errorMessage);
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    context.Response.StatusCode,
+                    Message = appEx.ErrorMessage,
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurredd.");
+                _logger.LogError(ex, "An unexpected error occurred.");
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = "An unexpected error occurred. Please try again laterr." };
-                await context.Response.WriteAsJsonAsync(errorMessage);
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    context.Response.StatusCode,
+                    Message = "An unexpected error occurred: " + ex.Message,
+                    Error = "For more details refer to the server logs." 
+                });
             }
         }
-    }
-}
+    }}
