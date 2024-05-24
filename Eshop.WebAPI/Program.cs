@@ -48,7 +48,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddDbContext<EshopDbContext>(
-    options => options.UseNpgsql(localConnectionString)
+    options => options.UseNpgsql(connectionString)
                       .UseSnakeCaseNamingConvention()
                       .AddInterceptors(new TimeStampInterceptor()));
 
@@ -121,8 +121,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Eshop API V1");
     c.RoutePrefix = string.Empty;
 });
-
-
 
 app.UseSwagger();
 app.UseSwaggerUI();
