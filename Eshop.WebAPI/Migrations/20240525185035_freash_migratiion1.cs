@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Eshop.WebAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class migrationcleaned : Migration
+    public partial class freash_migratiion1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

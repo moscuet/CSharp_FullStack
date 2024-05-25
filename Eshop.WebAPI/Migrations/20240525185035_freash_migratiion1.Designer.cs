@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Eshop.WebAPI.Migrations
 {
     [DbContext(typeof(EshopDbContext))]
-    [Migration("20240525175817_migrationcleaned")]
-    partial class migrationcleaned
+    [Migration("20240525185035_freash_migratiion1")]
+    partial class freash_migratiion1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
