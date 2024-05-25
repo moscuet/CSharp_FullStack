@@ -38,13 +38,22 @@ namespace Eshop.WebApi.src.Repo
 
         public async Task<ProductLine> GetByIdAsync(Guid id)
         {
-            var productLine = await _productLines.FirstOrDefaultAsync(pl => pl.Id == id);
+            var productLine = await _productLines
+        .Include(pl => pl.Products)
+            .ThenInclude(p => p.ProductImages)
+        .Include(pl => pl.Products)
+            .ThenInclude(p => p.Reviews)
+                .ThenInclude(r => r.ReviewImages)
+        .FirstOrDefaultAsync(pl => pl.Id == id);
+
             if (productLine == null)
             {
                 throw new KeyNotFoundException($"ProductLine with ID {id} not found.");
             }
+
             return productLine;
         }
+
 
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
@@ -61,7 +70,20 @@ namespace Eshop.WebApi.src.Repo
 
         public async Task<IEnumerable<ProductLine>> GetAllProductLinesAsync(QueryOptions options)
         {
-            return await _productLines.ToListAsync();
+            var limit = options.Limit.HasValue ? options.Limit.Value.ToString() : "NULL";
+            var offset = options.StartingAfter.HasValue ? options.StartingAfter.Value.ToString() : "NULL";
+            var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
+            var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder}'";
+            var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
+            var categoryName = string.IsNullOrWhiteSpace(options.CategoryName) ? "NULL" : $"'{options.CategoryName}'";
+
+            var sql = $"SELECT * FROM get_product_lines({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryName})";
+
+            var productLines = await _productLines.FromSqlRaw(sql)
+                .ToListAsync();
+
+            return productLines;
         }
     }
+
 }

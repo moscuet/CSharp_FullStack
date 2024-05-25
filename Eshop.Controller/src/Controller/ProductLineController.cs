@@ -28,7 +28,6 @@ namespace Eshop.Controller.src.Controllers
         }
 
         // GET: Get product line by ID
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductLineReadDTO>> GetByIdAsync(Guid id)
         {

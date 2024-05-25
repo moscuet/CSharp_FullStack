@@ -12,4 +12,4 @@ namespace Eshop.Core.src.Entity
 
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
     }
-}
+}   

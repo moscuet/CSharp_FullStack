@@ -3,6 +3,7 @@ using System;
 using Eshop.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Eshop.WebAPI.Migrations
 {
     [DbContext(typeof(EshopDbContext))]
-    partial class EshopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525153852_eedqqaaa")]
+    partial class eedqqaaa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,7 +107,6 @@ namespace Eshop.WebAPI.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text")
                         .HasColumnName("image_url");
@@ -358,8 +360,7 @@ namespace Eshop.WebAPI.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("character varying(2048)")
+                        .HasColumnType("text")
                         .HasColumnName("image_url");
 
                     b.Property<string>("Title")

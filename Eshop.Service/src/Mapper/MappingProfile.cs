@@ -38,7 +38,6 @@ public class MappingProfile : Profile
              .ForMember(dest => dest.ProductColorValue, opt => opt.MapFrom(src => src.ProductColor.Value))
              .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages));
 
-
         CreateMap<ProductCreateDTO, Product>();
         CreateMap<ProductUpdateDTO, Product>()
             .ForMember(dest => dest.ProductLineId, opts => opts.Condition(src => src.ProductLineId.HasValue))
@@ -48,15 +47,18 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price.HasValue));
 
         // ProductLine mappings
+        CreateMap<ProductLineCreateDTO, ProductLine>();
         CreateMap<ProductLine, ProductLineReadDTO>()
-       .ForMember(dest => dest.CategoryName, opts => opts.MapFrom(src => src.Category.Name))
-       .ForMember(dest => dest.Products, opts => opts.MapFrom(src => src.Products))
-       .ForMember(dest => dest.ImageUrls, opts => opts.MapFrom(src => src.Products.SelectMany(p => p.ProductImages).Select(img => img.Url).Distinct()));
-        CreateMap<ProductLineUpdateDTO, ProductLine>()
-                .ForMember(dest => dest.Title, opts => opts.Condition(src => src.Title != null))
-                .ForMember(dest => dest.Description, opts => opts.Condition(src => src.Description != null))
-                .ForMember(dest => dest.CategoryId, opts => opts.Condition(src => src.CategoryId.HasValue));
+            .ForMember(dest => dest.Products, opts => opts.MapFrom(src => src.Products))
+            .ForMember(dest => dest.Reviews, opts => opts.MapFrom(src => src.Reviews))
+            .ForMember(dest => dest.ImageUrl, opts => opts.MapFrom(src => src.ImageUrl));
 
+        CreateMap<ProductLineUpdateDTO, ProductLine>()
+            .ForMember(dest => dest.Title, opts => opts.Condition(src => src.Title != null))
+            .ForMember(dest => dest.Description, opts => opts.Condition(src => src.Description != null))
+            .ForMember(dest => dest.CategoryId, opts => opts.Condition(src => src.CategoryId.HasValue))
+            .ForMember(dest => dest.ImageUrl, opts => opts.Condition(src => src.ImageUrl != null));
+  
         // Order mappings
         CreateMap<OrderCreateControllerDTO, OrderCreateDTO>();
         CreateMap<Order, OrderReadDTO>();

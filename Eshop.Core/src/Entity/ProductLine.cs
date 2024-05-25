@@ -9,6 +9,8 @@ namespace Eshop.Core.src.Entity
         [Required, MaxLength(100)]
         public string Title { get; set; }
 
+        public string ImageUrl { get; set; }
+
         [Required, MaxLength(1080)]
         public string Description { get; set; }
 
@@ -17,11 +19,8 @@ namespace Eshop.Core.src.Entity
 
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
-
-        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-        public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
-
-        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public virtual ICollection<Product>? Products { get; set; } = new List<Product>();
+        public virtual ICollection<Review>? Reviews { get; set; } = new List<Review>();
        }
+
 }

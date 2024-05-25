@@ -112,6 +112,7 @@ namespace Eshop.WebApi.src.Data
                            entity.Property(e => e.Title).IsRequired().HasMaxLength(100);
                            entity.HasIndex(e => e.Title).IsUnique();
                            entity.Property(e => e.Description).IsRequired().HasMaxLength(1080);
+                           entity.Property(e => e.ImageUrl) .HasMaxLength(2048);
                            entity.HasOne(e => e.Category)
                            .WithMany(c => c.ProductLines)
                            .HasForeignKey(e => e.CategoryId)

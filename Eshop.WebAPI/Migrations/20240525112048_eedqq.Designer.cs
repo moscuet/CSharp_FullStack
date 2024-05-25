@@ -3,6 +3,7 @@ using System;
 using Eshop.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Eshop.WebAPI.Migrations
 {
     [DbContext(typeof(EshopDbContext))]
-    partial class EshopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525112048_eedqq")]
+    partial class eedqq
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -316,6 +319,10 @@ namespace Eshop.WebAPI.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
+                    b.Property<Guid?>("ProductLineId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_line_id");
+
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -331,6 +338,9 @@ namespace Eshop.WebAPI.Migrations
 
                     b.HasIndex("ProductId")
                         .HasDatabaseName("ix_product_images_product_id");
+
+                    b.HasIndex("ProductLineId")
+                        .HasDatabaseName("ix_product_images_product_line_id");
 
                     b.ToTable("product_images", (string)null);
                 });
@@ -355,12 +365,6 @@ namespace Eshop.WebAPI.Migrations
                         .HasMaxLength(1080)
                         .HasColumnType("character varying(1080)")
                         .HasColumnName("description");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("character varying(2048)")
-                        .HasColumnName("image_url");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -688,6 +692,11 @@ namespace Eshop.WebAPI.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_product_images_products_product_id");
 
+                    b.HasOne("Eshop.Core.src.Entity.ProductLine", null)
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductLineId")
+                        .HasConstraintName("fk_product_images_product_lines_product_line_id");
+
                     b.Navigation("Product");
                 });
 
@@ -767,6 +776,8 @@ namespace Eshop.WebAPI.Migrations
 
             modelBuilder.Entity("Eshop.Core.src.Entity.ProductLine", b =>
                 {
+                    b.Navigation("ProductImages");
+
                     b.Navigation("Products");
 
                     b.Navigation("Reviews");
