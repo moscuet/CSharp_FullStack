@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Eshop.WebAPI.Migrations
 {
     [DbContext(typeof(EshopDbContext))]
-    [Migration("20240522195251_qqeqia")]
-    partial class qqeqia
+    [Migration("20240525175817_migrationcleaned")]
+    partial class migrationcleaned
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,8 +23,6 @@ namespace Eshop.WebAPI.Migrations
                 .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "color_value", new[] { "red", "green", "blue", "black", "white", "yellow", "pink", "orange", "purple", "grey", "brown", "maroon", "teal", "navy", "olive", "lime", "silver", "gold", "beige" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "entity_type", new[] { "product", "review" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "order_status", new[] { "created", "processing", "completed", "cancelled" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "sort_by", new[] { "price", "rating", "popularity", "date" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "sort_order", new[] { "desc", "asc", "descending" });
@@ -361,6 +359,12 @@ namespace Eshop.WebAPI.Migrations
                         .HasColumnType("character varying(1080)")
                         .HasColumnName("description");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)")
+                        .HasColumnName("image_url");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -550,6 +554,10 @@ namespace Eshop.WebAPI.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
+                    b.Property<Guid?>("ProductLineId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_line_id");
+
                     b.Property<int>("Rating")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
@@ -570,6 +578,9 @@ namespace Eshop.WebAPI.Migrations
 
                     b.HasIndex("ProductId")
                         .HasDatabaseName("ix_reviews_product_id");
+
+                    b.HasIndex("ProductLineId")
+                        .HasDatabaseName("ix_reviews_product_line_id");
 
                     b.HasIndex("UserId", "ProductId")
                         .IsUnique()
@@ -716,6 +727,11 @@ namespace Eshop.WebAPI.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_reviews_products_product_id");
 
+                    b.HasOne("Eshop.Core.src.Entity.ProductLine", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductLineId")
+                        .HasConstraintName("fk_reviews_product_lines_product_line_id");
+
                     b.HasOne("Eshop.Core.src.Entity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -755,6 +771,8 @@ namespace Eshop.WebAPI.Migrations
             modelBuilder.Entity("Eshop.Core.src.Entity.ProductLine", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Eshop.Core.src.Entity.ProductSize", b =>

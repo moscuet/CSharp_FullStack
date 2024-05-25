@@ -6,14 +6,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Eshop.WebAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class qqeqia : Migration
+    public partial class migrationcleaned : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:Enum:color_value", "red,green,blue,black,white,yellow,pink,orange,purple,grey,brown,maroon,teal,navy,olive,lime,silver,gold,beige")
-                .Annotation("Npgsql:Enum:entity_type", "product,review")
                 .Annotation("Npgsql:Enum:order_status", "created,processing,completed,cancelled")
                 .Annotation("Npgsql:Enum:sort_by", "price,rating,popularity,date")
                 .Annotation("Npgsql:Enum:sort_order", "desc,asc,descending")
@@ -99,6 +97,7 @@ namespace Eshop.WebAPI.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    image_url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
                     description = table.Column<string>(type: "character varying(1080)", maxLength: 1080, nullable: false),
                     category_id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -237,12 +236,18 @@ namespace Eshop.WebAPI.Migrations
                     comment = table.Column<string>(type: "character varying(1080)", maxLength: 1080, nullable: false),
                     rating = table.Column<int>(type: "integer", nullable: false, defaultValue: 1, comment: "Rating must be between 1 and 5"),
                     is_anonymous = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    product_line_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_reviews", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_reviews_product_lines_product_line_id",
+                        column: x => x.product_line_id,
+                        principalTable: "product_lines",
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "fk_reviews_products_product_id",
                         column: x => x.product_id,
@@ -383,6 +388,11 @@ namespace Eshop.WebAPI.Migrations
                 name: "ix_reviews_product_id",
                 table: "reviews",
                 column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_reviews_product_line_id",
+                table: "reviews",
+                column: "product_line_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_reviews_user_id_product_id",
