@@ -43,22 +43,24 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ProductLineId, opts => opts.Condition(src => src.ProductLineId.HasValue))
             .ForMember(dest => dest.ProductSizeId, opts => opts.Condition(src => src.ProductSizeId.HasValue))
             .ForMember(dest => dest.ProductColorId, opts => opts.Condition(src => src.ProductColorId.HasValue))
-            .ForMember(dest => dest.Inventory, opts => opts.Condition(src => src.Inventory.HasValue))
-            .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price.HasValue));
+            .ForMember(dest => dest.Inventory, opts => opts.Condition(src => src.Inventory.HasValue));
 
         // ProductLine mappings
         CreateMap<ProductLineCreateDTO, ProductLine>();
         CreateMap<ProductLine, ProductLineReadDTO>()
             .ForMember(dest => dest.Products, opts => opts.MapFrom(src => src.Products))
             .ForMember(dest => dest.Reviews, opts => opts.MapFrom(src => src.Reviews))
-            .ForMember(dest => dest.ImageUrl, opts => opts.MapFrom(src => src.ImageUrl));
+            .ForMember(dest => dest.ImageUrl, opts => opts.MapFrom(src => src.ImageUrl))
+            .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price >= 0));
+
 
         CreateMap<ProductLineUpdateDTO, ProductLine>()
             .ForMember(dest => dest.Title, opts => opts.Condition(src => src.Title != null))
             .ForMember(dest => dest.Description, opts => opts.Condition(src => src.Description != null))
             .ForMember(dest => dest.CategoryId, opts => opts.Condition(src => src.CategoryId.HasValue))
-            .ForMember(dest => dest.ImageUrl, opts => opts.Condition(src => src.ImageUrl != null));
-  
+            .ForMember(dest => dest.ImageUrl, opts => opts.Condition(src => src.ImageUrl != null))
+              .ForMember(dest => dest.Price, opts => opts.Condition(src => src.Price.HasValue));
+
         // Order mappings
         CreateMap<OrderCreateControllerDTO, OrderCreateDTO>();
         CreateMap<Order, OrderReadDTO>();

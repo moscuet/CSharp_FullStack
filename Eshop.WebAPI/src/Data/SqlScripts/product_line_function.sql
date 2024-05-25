@@ -1,24 +1,37 @@
 CREATE OR REPLACE FUNCTION get_product_lines(
-    p_limit INT, 
-    p_starting_after INT, 
-    p_sort_by TEXT, 
-    p_sort_order TEXT, 
-    p_search_key TEXT, 
-    p_category_name TEXT
-)
-RETURNS SETOF product_lines AS $$
+    p_limit integer,
+    p_starting_after integer,
+    p_sort_by text,
+    p_sort_order text,
+    p_search_key text,
+    p_category_name text)
+    RETURNS TABLE(
+        id uuid, 
+        title character varying, 
+        description character varying, 
+        image_url character varying, 
+        category_id uuid, 
+        created_at timestamp with time zone, 
+        updated_at timestamp with time zone
+    ) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+AS $BODY$
 DECLARE
     query TEXT;
 BEGIN
-    query := 'SELECT pl.*, c.name as category_name FROM product_lines pl ' ||
+    query := 'SELECT pl.id, pl.title, pl.description, pl.image_url, pl.category_id, pl.created_at, pl.updated_at ' ||
+             'FROM product_lines pl ' ||
              'JOIN categories c ON pl.category_id = c.id WHERE 1=1';
 
-    IF p_search_key IS NOT NULL THEN
-        query := query || ' AND (pl.title LIKE ''%' || p_search_key || '%'' OR pl.description LIKE ''%' || p_search_key || '%'')';
+    IF p_search_key IS NOT NULL AND p_search_key <> '' THEN
+        query := query || ' AND (pl.title ILIKE ''%' || p_search_key || '%'' OR pl.description ILIKE ''%' || p_search_key || '%'')';
     END IF;
 
-    IF p_category_name IS NOT NULL THEN
-        query := query || ' AND c.name = ''' || p_category_name || '''';
+    IF p_category_name IS NOT NULL AND p_category_name <> '' THEN
+        query := query || ' AND LOWER(c.name) = LOWER(''' || p_category_name || ''')';
     END IF;
 
     IF p_sort_by IS NOT NULL AND p_sort_order IS NOT NULL THEN
@@ -33,6 +46,10 @@ BEGIN
         query := query || ' OFFSET ' || p_starting_after;
     END IF;
 
+    -- Log the query
+    RAISE NOTICE 'Executing query: %', query;
+
     RETURN QUERY EXECUTE query;
 END;
-$$ LANGUAGE plpgsql;
+$BODY$;
+

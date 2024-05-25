@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Eshop.Core.src.ValueObject;
 
 namespace Eshop.Core.src.Entity;
 
