@@ -42,11 +42,17 @@ namespace Eshop.Service.src.Service
                     throw new Exception($"Product with ID {itemDto.ProductId} not found.");
                 }
 
+                var productLine = product.ProductLine;
+                if (productLine is null)
+                {
+                    throw new Exception($"ProductLine for Product with ID {itemDto.ProductId} not found.");
+                }
+
                 var orderItem = new OrderItem
                 {
                     ProductId = itemDto.ProductId,
                     Quantity = itemDto.Quantity,
-                    Price = product.Price
+                    Price = productLine.Price 
                 };
 
                 order.AddItem(orderItem);

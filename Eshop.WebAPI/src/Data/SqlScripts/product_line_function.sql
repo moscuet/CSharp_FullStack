@@ -1,3 +1,4 @@
+DROP FUNCTION IF EXISTS get_product_lines( p_limit integer, p_starting_after integer, p_sort_by text, p_sort_order text, p_search_key text, p_category_name text );
 CREATE OR REPLACE FUNCTION get_product_lines(
     p_limit integer,
     p_starting_after integer,
@@ -10,6 +11,7 @@ CREATE OR REPLACE FUNCTION get_product_lines(
         title character varying, 
         description character varying, 
         image_url character varying, 
+        price decimal(18,2), 
         category_id uuid, 
         created_at timestamp with time zone, 
         updated_at timestamp with time zone
@@ -22,7 +24,7 @@ AS $BODY$
 DECLARE
     query TEXT;
 BEGIN
-    query := 'SELECT pl.id, pl.title, pl.description, pl.image_url, pl.category_id, pl.created_at, pl.updated_at ' ||
+    query := 'SELECT pl.id, pl.title, pl.description, pl.image_url, pl.price, pl.category_id, pl.created_at, pl.updated_at ' ||
              'FROM product_lines pl ' ||
              'JOIN categories c ON pl.category_id = c.id WHERE 1=1';
 
@@ -52,4 +54,3 @@ BEGIN
     RETURN QUERY EXECUTE query;
 END;
 $BODY$;
-
