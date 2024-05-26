@@ -1,3 +1,4 @@
+using AutoMapper;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.RepoAbstraction;
 using Eshop.Core.src.ValueObject;
@@ -11,32 +12,31 @@ namespace Eshop.Service.src.Service
         private readonly IUserRepository _userRepo;
         private readonly ITokenService _tokenService;
         private readonly IPasswordService _passwordService;
+        private readonly IMapper _mapper;
 
-        public AuthService(IUserRepository userRepo, IUserService userService, ITokenService tokenService, IPasswordService passwordService)
+
+        public AuthService(IUserRepository userRepo, IUserService userService, ITokenService tokenService, IPasswordService passwordService, IMapper mapper)
         {
             _userRepo = userRepo;
             _tokenService = tokenService;
             _passwordService = passwordService;
+            _mapper = mapper;
         }
 
-        public async Task<string> LoginAsync(UserCredential userCredential)
+        public async Task<TokenDTO> LoginAsync(UserCredential userCredential)
         {
-            var user = await _userRepo.GetUserByEmailAsync(userCredential.Email);
-            if (user == null || !_passwordService.VerifyPassword(userCredential.Password, user.Password, user.Salt))
+            var userExist = await _userRepo.GetUserByEmailAsync(userCredential.Email);
+            if (userExist == null || !_passwordService.VerifyPassword(userCredential.Password, userExist.Password, userExist.Salt))
             {
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
-            return _tokenService.GenerateToken(user, TokenType.AccessToken);
-        }
-
-        public Task<TokenDTO> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> RevokeTokenAsync(string refreshToken)
-        {
-            throw new NotImplementedException();
+            var token = _tokenService.GenerateToken(userExist, TokenType.AccessToken);
+            var userReadDto = _mapper.Map<UserReadDTO>(userExist);
+            return new TokenDTO
+            {
+                AccessToken = token,
+                User = userReadDto
+            };
         }
     }
 }

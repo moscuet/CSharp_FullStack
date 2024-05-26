@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.Entity;
 using Eshop.WebApi.src.Data;
@@ -38,6 +39,7 @@ namespace Eshop.WebApi.src.Repo
 
         public async Task<ProductLine> GetByIdAsync(Guid id)
         {
+        #pragma warning disable CS8620 
             var productLine = await _productLines
         .Include(pl => pl.Products)
             .ThenInclude(p => p.ProductImages)
@@ -45,6 +47,7 @@ namespace Eshop.WebApi.src.Repo
             .ThenInclude(p => p.Reviews)
                 .ThenInclude(r => r.ReviewImages)
         .FirstOrDefaultAsync(pl => pl.Id == id);
+         #pragma warning restore CS8620
 
             if (productLine == null)
             {
@@ -82,6 +85,7 @@ namespace Eshop.WebApi.src.Repo
             var productLines = await _productLines.FromSqlRaw(sql)
                 .ToListAsync();
 
+            Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(productLines)}");
             return productLines;
         }
     }

@@ -16,7 +16,7 @@ namespace Eshop.Controller.src.Controller
         }
 
         [HttpPost("login")]
-        public async Task<string> LoginAsync(UserCredential userCredential)
+        public async Task<TokenDTO> LoginAsync(UserCredential userCredential)
         {
             return await _authService.LoginAsync(userCredential);
         }

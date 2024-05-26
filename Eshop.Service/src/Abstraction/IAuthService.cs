@@ -5,8 +5,6 @@ namespace Eshop.Service.src.ServiceAbstraction
 {
     public interface IAuthService
     {
-        Task<string> LoginAsync(UserCredential credential);
-        Task<TokenDTO> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO);
-        Task<bool> RevokeTokenAsync(string refreshToken);
+        Task<TokenDTO> LoginAsync(UserCredential credential);
     }
 }
