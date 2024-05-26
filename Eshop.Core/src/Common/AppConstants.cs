@@ -4,7 +4,7 @@ namespace Eshop.Core.src.Common
 {
     public static class AppConstants
     {
-        public const int PER_PAGE = 10;
+        public const int PER_PAGE = 25;
         public const SortBy DEFAULT_SORT_BY = SortBy.Date;
         public const SortOrder DEFAULT_SORT_ORDER = SortOrder.DESC;
 
