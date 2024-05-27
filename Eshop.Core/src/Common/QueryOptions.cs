@@ -10,7 +10,7 @@ namespace Eshop.Core.src.Common
         public SortBy? SortBy { get; set; } 
         public SortOrder? SortOrder { get; set; }
         public string? SearchKey { get; set; } = string.Empty; 
-        public string ? CategoryName { get; set; }
+        public string ? CategoryId { get; set; }
     }
     
 }

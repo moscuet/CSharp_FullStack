@@ -117,26 +117,28 @@ namespace Eshop.WebApi.src.Repo
             await _context.SaveChangesAsync();
             return true;
         }
+public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options)
+{
+    var limit = options.Limit.HasValue ? options.Limit.Value.ToString() : "NULL";
+    var offset = options.StartingAfter.HasValue ? options.StartingAfter.Value.ToString() : "NULL";
+    var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
+    var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder}'";
+    var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
+    var categoryId = string.IsNullOrWhiteSpace(options.CategoryId) ? "NULL" : $"'{options.CategoryId}'";
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options)
-        {
-            var limit = options.Limit.HasValue ? options.Limit.Value.ToString() : "NULL";
-            var offset = options.StartingAfter.HasValue ? options.StartingAfter.Value.ToString() : "NULL";
-            var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
-            var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder}'";
-            var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
+    var sql = $"SELECT * FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryId})";
 
-            var sql = $"SELECT * FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey})";
+    var products = await _products.FromSqlRaw(sql)
+        .Include(p => p.ProductLine)
+        .ThenInclude(pl => pl.Category)
+        .Include(p => p.ProductSize)
+        .Include(p => p.ProductColor)
+        .Include(p => p.ProductImages)
+        .ToListAsync();
 
-            var products = await _products.FromSqlRaw(sql)
-                .Include(p => p.ProductLine)
-                .Include(p => p.ProductSize)
-                .Include(p => p.ProductColor)
-                .Include(p => p.ProductImages)
-                .ToListAsync();
-
-            return products;
+    return products;
+}
         }
 
     }
-}
+

@@ -78,13 +78,12 @@ namespace Eshop.WebApi.src.Repo
             var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
             var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder}'";
             var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
-            var categoryName = string.IsNullOrWhiteSpace(options.CategoryName) ? "NULL" : $"'{options.CategoryName}'";
+            var categoryName = string.IsNullOrWhiteSpace(options.CategoryId) ? "NULL" : $"'{options.CategoryId}'";
 
             var sql = $"SELECT * FROM get_product_lines({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryName})";
 
             var productLines = await _productLines.FromSqlRaw(sql)
                 .ToListAsync();
-
             Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(productLines)}");
             return productLines;
         }
