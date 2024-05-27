@@ -32,11 +32,13 @@ public class MappingProfile : Profile
              .ForMember(dest => dest.PhoneNumber, opts => opts.Condition(src => src.PhoneNumber != null));
 
         // Product mappings
-        CreateMap<Product, ProductReadDTO>()
+       CreateMap<Product, ProductReadDTO>()
              .ForMember(dest => dest.ProductLineName, opt => opt.MapFrom(src => src.ProductLine.Title))
              .ForMember(dest => dest.ProductSizeValue, opt => opt.MapFrom(src => src.ProductSize.Value))
              .ForMember(dest => dest.ProductColorValue, opt => opt.MapFrom(src => src.ProductColor.Value))
-             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages));
+             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ProductImages))
+             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.ProductLine.Price)) // Mapping the Price from ProductLine
+             ;
 
         CreateMap<ProductCreateDTO, Product>();
         CreateMap<ProductUpdateDTO, Product>()

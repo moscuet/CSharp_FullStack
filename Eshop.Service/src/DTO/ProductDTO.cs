@@ -24,6 +24,7 @@ public class ProductReadDTO
     public string ProductLineName { get; set; }
     public string ProductSizeValue { get; set; }
     public string ProductColorValue { get; set; }
+    public decimal Price { get; set; }  = 0;
 }
 
 
