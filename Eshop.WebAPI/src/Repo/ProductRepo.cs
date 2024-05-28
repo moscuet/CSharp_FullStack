@@ -80,8 +80,6 @@ namespace Eshop.WebApi.src.Repo
             {
                 throw new KeyNotFoundException($"Product with ID {product.Id} not found.");
             }
-            Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(existingProduct)}");
-
             _context.Update(product);
 
             await _context.SaveChangesAsync();
@@ -126,22 +124,22 @@ namespace Eshop.WebApi.src.Repo
             var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
             var categoryId = string.IsNullOrWhiteSpace(options.CategoryId) ? "NULL" : $"'{options.CategoryId}'";
 
-            var sql = $"SELECT * FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryId})";
-                          Console.WriteLine(sql );
+            var sql = $@"SELECT product_id AS id  FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryId})";
+            var productIds = await _products.FromSqlRaw(sql).Select(p => p.Id).ToListAsync();
 
-             Console.WriteLine(sortBy);
-                          Console.WriteLine("sortBy");
-
-            var products = await _products.FromSqlRaw(sql)
+            var products = await _products
+                .Where(p => productIds.Contains(p.Id))
                 .Include(p => p.ProductLine)
-                .ThenInclude(pl => pl.Category)
+                    .ThenInclude(pl => pl.Category)
                 .Include(p => p.ProductSize)
                 .Include(p => p.ProductColor)
                 .Include(p => p.ProductImages)
                 .ToListAsync();
+            var orderedProducts = productIds.Select(id => products.First(p => p.Id == id)).ToList();
 
-            return products;
+            return orderedProducts;
         }
+
     }
 
 }

@@ -55,13 +55,13 @@ namespace Eshop.WebApi.src.middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred.");
+                _logger.LogError(ex, "An unexpected error occurred@@@@@@@@@@@@@@.");
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 await context.Response.WriteAsJsonAsync(new
                 {
                     context.Response.StatusCode,
-                    Message = "An unexpected error occurred: " + ex.Message,
+                    Message = "An unexpected error occurred##############: " + ex.Message,
                     Error = "For more details refer to the server logs." 
                 });
             }

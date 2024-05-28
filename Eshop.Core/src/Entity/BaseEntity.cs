@@ -5,7 +5,7 @@ namespace Eshop.Core.src.Entity
     public class BaseEntity
     {
         [Key]
-        public Guid Id { get; private set; } 
+        public Guid Id { get; set; } 
 
         public DateTimeOffset CreatedAt { get; set; }
 

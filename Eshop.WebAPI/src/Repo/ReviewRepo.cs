@@ -74,8 +74,6 @@ namespace Eshop.WebApi.src.Repo
             {
                 throw AppException.NotFound($"Review with ID {review.Id} not found.");
             }
-             Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(existingReview)}");
-
             _context.Update(review);
 
             await _context.SaveChangesAsync();

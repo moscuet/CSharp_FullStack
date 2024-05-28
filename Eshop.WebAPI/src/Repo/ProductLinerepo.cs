@@ -84,7 +84,6 @@ namespace Eshop.WebApi.src.Repo
 
             var productLines = await _productLines.FromSqlRaw(sql)
                 .ToListAsync();
-            Console.WriteLine($"From review controller: reviewDto: {JsonSerializer.Serialize(productLines)}");
             return productLines;
         }
     }

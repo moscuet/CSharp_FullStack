@@ -5,6 +5,6 @@ namespace Eshop.Core.src.ValueObject
         Price,
         Rating,
         Popularity,
-        Date, //default created_at
+        Date, 
     }
 }

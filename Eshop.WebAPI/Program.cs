@@ -18,11 +18,9 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
  Env.Load();
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new InvalidOperationException("JWT Key is not set.");
 var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT Issuer is not set.");
-//  var connectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
 
 // Parse the DATABASE_URL
 var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
@@ -38,7 +36,6 @@ var connectionString = new NpgsqlConnectionStringBuilder
     Password = userInfo[1],
     Database = databaseUri.LocalPath.TrimStart('/')
 }.ToString();
-
 
 // Configure services...
 builder.Services.AddEndpointsApiExplorer();
@@ -117,7 +114,6 @@ using (var scope = app.Services.CreateScope())
     await dbContext.SeedDataAsync();
 }
 
-
 // Configure middlewares...
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -128,9 +124,8 @@ app.UseSwaggerUI(c =>
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseCors("AllowAll"); 
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
- app.Run($"http://0.0.0.0:{Port}");
+app.Run($"http://0.0.0.0:{Port}");
