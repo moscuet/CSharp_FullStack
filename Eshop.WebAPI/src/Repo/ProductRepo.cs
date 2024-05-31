@@ -136,10 +136,8 @@ namespace Eshop.WebApi.src.Repo
                 .Include(p => p.ProductImages)
                 .ToListAsync();
             var orderedProducts = productIds.Select(id => products.First(p => p.Id == id)).ToList();
-
             return orderedProducts;
         }
-
     }
 
 }

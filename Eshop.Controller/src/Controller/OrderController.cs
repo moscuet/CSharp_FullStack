@@ -51,16 +51,19 @@ namespace Eshop.WebApi.Controllers
         // GET: api/Order
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<OrderReadDTO>>> GetAllUserOrders(Guid userId, [FromQuery] QueryOptions options)
+        public async Task<ActionResult<IEnumerable<OrderReadDTO>>> GetAllUserOrders(Guid? userId, [FromQuery] QueryOptions options)
         {
             var (currentUserId, currentUserRole) = UserContextHelper.GetUserClaims(HttpContext);
 
-            if (currentUserId != userId && currentUserRole != "Admin")
+            if (userId.HasValue && currentUserRole != "Admin")
                 return Forbid();
 
-            var orders = await _orderService.GetAllUserOrdersAsync(userId, options);
+            Guid fetchUserId = (Guid)(userId ?? currentUserId);
+
+            var orders = await _orderService.GetAllUserOrdersAsync(fetchUserId, options);
             return Ok(_mapper.Map<IEnumerable<OrderReadDTO>>(orders));
         }
+
 
         // GET: api/Order/{id}
         [HttpGet("{id}")]

@@ -21,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
  Env.Load();
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new InvalidOperationException("JWT Key is not set.");
 var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT Issuer is not set.");
+// var connectionString = "Host=localhost;Port=5432;Database=eshop;Username=test_admin;Password=testadminsecret;";
 
 // Parse the DATABASE_URL
 var Port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
@@ -124,7 +125,7 @@ app.UseSwaggerUI(c =>
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseCors("AllowAll"); 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
