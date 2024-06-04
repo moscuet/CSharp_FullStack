@@ -120,10 +120,15 @@ namespace Eshop.WebApi.src.Repo
             var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder}'";
             var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
             var categoryId = string.IsNullOrWhiteSpace(options.CategoryId) ? "NULL" : $"'{options.CategoryId}'";
+          
+            var priceRange = string.IsNullOrWhiteSpace(options.PriceRange) ? null : options.PriceRange;
+            var prices = priceRange?.Split(new string[] { "," }, StringSplitOptions.None) ?? new string[] { "NULL", "NULL" };
+            var minPrice = prices.Length > 0 && int.TryParse(prices[0], out var min) ? min.ToString() : "NULL";
+            var maxPrice = prices.Length > 1 && int.TryParse(prices[1], out var max) ? max.ToString() : "NULL";
 
-            var sql = $@"SELECT product_id AS id  FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryId})";
+
+            var sql = $@"SELECT product_id AS id FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryId}, {minPrice}, {maxPrice})";
             var productIds = await _products.FromSqlRaw(sql).Select(p => p.Id).ToListAsync();
-             Console.WriteLine($"From controller: reviewcraeted: {JsonSerializer.Serialize(sql)}\n");
 
             var products = await _products
                 .Where(p => productIds.Contains(p.Id))
@@ -137,6 +142,5 @@ namespace Eshop.WebApi.src.Repo
             return orderedProducts;
         }
     }
-
 }
 
