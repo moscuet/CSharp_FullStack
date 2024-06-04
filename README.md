@@ -1,163 +1,98 @@
-<Project Sdk="Microsoft.NET.Sdk">
+# Fullstack Project
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+![TypeScript](https://img.shields.io/badge/TypeScript-v.4-green)
+![SASS](https://img.shields.io/badge/SASS-v.4-hotpink)
+![React](https://img.shields.io/badge/React-v.18-blue)
+![Redux toolkit](https://img.shields.io/badge/Redux-v.1.9-brown)
+![.NET Core](https://img.shields.io/badge/.NET%20Core-v.8-purple)
+![EF Core](https://img.shields.io/badge/EF%20Core-v.8-cyan)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v.16-drakblue)
 
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+This project involves creating a Fullstack project with React and Redux in the frontend and ASP.NET Core 7 in the backend. The goal is to provide a seamless experience for users, along with robust management system for administrators.
 
-  <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="Moq" Version="4.20.70" />
-    <PackageReference Include="xunit" Version="2.5.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
-  </ItemGroup>
+- Frontend: SASS, TypeScript, React, Redux Toolkit
+- Backend: ASP.NET Core, Entity Framework Core, PostgreSQL
 
-  <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
+You can follow the same topics as your backend project or choose the alternative one, between E-commerce and Library. You can reuse the previous frontend project, with necessary modification to fit your backend server.
 
-  <ItemGroup>
-    <ProjectReference Include="..\Ecommerce.Service\Ecommerce.Service.csproj" />
-    <ProjectReference Include="..\Ecommerce.Core\Ecommerce.Core.csproj" />
-  </ItemGroup>
+## Table of Contents
 
-</Project>
+1. [Instruction](#instruction)
+2. [Features](#features)
+   - [Mandatory features](#mandatory-features)
+   - [Extra features](#extra-features)
+3. [Requirements](#requirements)
+4. [Getting Started](#getting-started)
+5. [Testing](#testing)
 
+## Instruction
 
-<Project Sdk="Microsoft.NET.Sdk">
+This repository should be used only for backend server. The frontend server should be done in a separate repository [here](https://github.com/Integrify-Finland/fs17-Frontend-project). You can modify your previous frontend project and instructors will check the submissions (pull requests) in the frontend project repository. The modified frontend server need to be connected with this backend server to make a whole fullstack project.
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+### Frontend
 
-</Project>
+If you only modify the previoud frontend project, you can work on the same repository and there is no need to open new pull request. However, you can get back to your previous pull request and remove all the labels. In case you want to make new project from scratch, you can fork and clone the original repository and open new pullrequest for your new frontend.
 
+### Backend
 
-<Project Sdk="Microsoft.NET.Sdk">
+Generate a solution file in this repository. All the project layers of backend server should be added into this solution.
 
-  <ItemGroup>
-    <ProjectReference Include="..\Eshop.Service\Eshop.Service.csproj" />
-    <ProjectReference Include="..\Eshop.Core\Eshop.Core.csproj" />
-  </ItemGroup>
+## Features
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-  </ItemGroup>
+### Mandatory features
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+#### User Functionalities
 
-</Project>
+1. User Management: Users should be able to register for an account and manage their profile.
+2. Browse Products: Users should be able to view all available products and single product, search and sort products.
+3. Add to Cart: Users should be able to add products to a shopping cart, and manage cart.
+4. Oders: Users should be able to place orders and see the history of their orders.
 
+#### Admin Functionalities
 
-<Project Sdk="Microsoft.NET.Sdk">
+1. User Management: Admins should be able to manage all users.
+2. Product Management: Admins should be able to manage all products.
+3. Order Management: Admins should be able to manage all orders.
 
-  <ItemGroup>
-    <ProjectReference Include="..\Eshop.Core\Eshop.Core.csproj" />
-  </ItemGroup>
+### Bonus-point 
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-  </ItemGroup>
+1. Third party integrations, for example: Google Authentication, Sending Email, Payment gateway, etc.
+2. Extra features, for examples: dynamic pricing algorithms, chatbots, subscription, admin dashboard with analytics, etc.
 
+## Requirements
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+1. Project should use CLEAN architecture, proper naming convention, security, and comply with Rest API. In README file, explain the structure of your project as well.
+2. Error handler: This will ensure any exceptions thrown in your application are handled appropriately and helpful error messages are returned.
+3. In backend server, unit testing (xunit) should be done, at least for Service(Use case) layer. We recommend to test entities, repositories and controllers as well.
+4. Document with Swagger: Make sure to annotate your API endpoints and generate a Swagger UI for easier testing and documentation.
+5. `README` file should sufficiently describe the project, as well as the deployment, link to frontend github.
+6. Frontend, backend, and database servers need to be available in the live servers.  
 
-</Project>
+## Getting Started
 
+1. Start with backend first before moving to frontend.
+2. In the backend, here is the recommended order:
 
-<Project Sdk="Microsoft.NET.Sdk.Web">
+   - Plan Your Database Schema before start coding
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+   - Set Up the Project Structure
 
-  <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="32.0.3" />
-    <PackageReference Include="DotNetEnv" Version="3.0.0" />
-    <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
-  </ItemGroup>
+   - Build the models
 
-  <ItemGroup>
-    <ProjectReference Include="..\Eshop.Controller\Eshop.Controller.csproj" />
-    <ProjectReference Include="..\Eshop.Service\Eshop.Service.csproj" />
-    <ProjectReference Include="..\Eshop.Core\Eshop.Core.csproj" />
-  </ItemGroup>
+   - Create the Repositories
 
-</Project>
+   - Build the Services
 
-soln : 
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.Core", "Eshop.Core\Eshop.Core.csproj", "{33307B86-EF58-4C17-9DF9-C15AC20D8747}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.Service", "Eshop.Service\Eshop.Service.csproj", "{DE522346-4E0F-42D2-873C-7182879CE4BB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.Controller", "Eshop.Controller\Eshop.Controller.csproj", "{61BD9202-20BC-4B02-A41D-915D6C2B48D7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.WebAPI", "Eshop.WebAPI\Eshop.WebAPI.csproj", "{17A93BA7-6677-4CDD-8311-77CDF4245F44}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{33307B86-EF58-4C17-9DF9-C15AC20D8747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33307B86-EF58-4C17-9DF9-C15AC20D8747}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33307B86-EF58-4C17-9DF9-C15AC20D8747}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33307B86-EF58-4C17-9DF9-C15AC20D8747}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE522346-4E0F-42D2-873C-7182879CE4BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE522346-4E0F-42D2-873C-7182879CE4BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE522346-4E0F-42D2-873C-7182879CE4BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE522346-4E0F-42D2-873C-7182879CE4BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61BD9202-20BC-4B02-A41D-915D6C2B48D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61BD9202-20BC-4B02-A41D-915D6C2B48D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61BD9202-20BC-4B02-A41D-915D6C2B48D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61BD9202-20BC-4B02-A41D-915D6C2B48D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17A93BA7-6677-4CDD-8311-77CDF4245F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17A93BA7-6677-4CDD-8311-77CDF4245F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17A93BA7-6677-4CDD-8311-77CDF4245F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17A93BA7-6677-4CDD-8311-77CDF4245F44}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-EndGlobal
+   - Set Up Authentication & Authorization
 
+   - Build the Controllers
 
-this project is cleadn solid arcitect dotnet project. u need to write raed me file
+   - Implement Error Handling Middleware
+
+3. You should focus on the mandatory features first. Make sure you have minimal working project before opting for advanced functionalities.
+
+Testing should be done along the development circle, early and regularly.
+
+## Testing
+
+Unit testing, and optionally integration testing, must be included for both frontend and backend code. Aim for high test coverage and ensure all major functionalities are covered.
