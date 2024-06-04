@@ -63,7 +63,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = false,
-            ValidIssuer = "https://eshop.com"
+            ValidIssuer = issuer
         };
     });
 
