@@ -1,4 +1,6 @@
-# Fullstack Project
+
+
+# Fullstack Ecommerce:  Eshop
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-v.4-green)
 ![SASS](https://img.shields.io/badge/SASS-v.4-hotpink)
@@ -6,93 +8,63 @@
 ![Redux toolkit](https://img.shields.io/badge/Redux-v.1.9-brown)
 ![.NET Core](https://img.shields.io/badge/.NET%20Core-v.8-purple)
 ![EF Core](https://img.shields.io/badge/EF%20Core-v.8-cyan)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v.16-drakblue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v.16-darkblue)
 
-This project involves creating a Fullstack project with React and Redux in the frontend and ASP.NET Core 7 in the backend. The goal is to provide a seamless experience for users, along with robust management system for administrators.
+This project involves creating a Fullstack e-commerce platform with a cutting-edge frontend built on TypeScript, React, and Redux Toolkit. The backend is powered by ASP.NET Core 8, utilizing Entity Framework Core for database operations with PostgreSQL. The goal is to deliver a seamless shopping experience for users and provide a robust management system for administrators.
 
-- Frontend: SASS, TypeScript, React, Redux Toolkit
-- Backend: ASP.NET Core, Entity Framework Core, PostgreSQL
+- **Frontend:** TypeScript, React, Redux Toolkit, React Router, Material UI, Jest, React-Hook-Form
+  - **Repository:** You can find the frontend project repository [here](https://github.com/moscuet/fs17-Frontend)
+  - **Live Demo:** Experience the innovation firsthand by exploring our live demo at [here](https://virtuous-motivation-production.up.railway.app/index.html).
 
-You can follow the same topics as your backend project or choose the alternative one, between E-commerce and Library. You can reuse the previous frontend project, with necessary modification to fit your backend server.
+- **Backend:** ASP.NET Core 8, Entity Framework Core, PostgreSQL
 
 ## Table of Contents
 
-1. [Instruction](#instruction)
-2. [Features](#features)
-   - [Mandatory features](#mandatory-features)
-   - [Extra features](#extra-features)
-3. [Requirements](#requirements)
-4. [Getting Started](#getting-started)
-5. [Testing](#testing)
+1. [Technologies and Libraries](#technologies-and-libraries)
+2. [Getting Started](#getting-started)
+3. [Relational Database Design](#relational-database-design)
+4. [Folder Structure](#folder-structure)
+5. [Clean Architecture Overview](#clean-architecture-overview)
+6. [API Documentation](#api-documentation)
+7. [Features](#features)
+8. [Testing](#testing)
 
-## Instruction
+## Technologies and Libraries
 
-This repository should be used only for backend server. The frontend server should be done in a separate repository [here](https://github.com/Integrify-Finland/fs17-Frontend-project). You can modify your previous frontend project and instructors will check the submissions (pull requests) in the frontend project repository. The modified frontend server need to be connected with this backend server to make a whole fullstack project.
+This section outlines the core technologies and essential libraries used in the backend of this e-commerce application, explaining their functions and significance in the overall architecture.
 
-### Frontend
+| Technology            | Function                                                                                | Version       |
+| --------------------- | --------------------------------------------------------------------------------------- | ------------- |
+| ASP.NET Core          | Primary framework for server-side logic, routing, middleware, and dependency management | .NET Core 8.0 |
+| Entity Framework Core | ORM (Object-Relational Mapper) for database operations, simplifying SQL queries         | 8.0.4         |
+| PostgreSQL            | Relational database management system for storing application data                      | 16            |
 
-If you only modify the previoud frontend project, you can work on the same repository and there is no need to open new pull request. However, you can get back to your previous pull request and remove all the labels. In case you want to make new project from scratch, you can fork and clone the original repository and open new pullrequest for your new frontend.
-
-### Backend
-
-Generate a solution file in this repository. All the project layers of backend server should be added into this solution.
-
-## Features
-
-### Mandatory features
-
-#### User Functionalities
-
-1. User Management: Users should be able to register for an account and manage their profile.
-2. Browse Products: Users should be able to view all available products and single product, search and sort products.
-3. Add to Cart: Users should be able to add products to a shopping cart, and manage cart.
-4. Oders: Users should be able to place orders and see the history of their orders.
-
-#### Admin Functionalities
-
-1. User Management: Admins should be able to manage all users.
-2. Product Management: Admins should be able to manage all products.
-3. Order Management: Admins should be able to manage all orders.
-
-### Bonus-point 
-
-1. Third party integrations, for example: Google Authentication, Sending Email, Payment gateway, etc.
-2. Extra features, for examples: dynamic pricing algorithms, chatbots, subscription, admin dashboard with analytics, etc.
-
-## Requirements
-
-1. Project should use CLEAN architecture, proper naming convention, security, and comply with Rest API. In README file, explain the structure of your project as well.
-2. Error handler: This will ensure any exceptions thrown in your application are handled appropriately and helpful error messages are returned.
-3. In backend server, unit testing (xunit) should be done, at least for Service(Use case) layer. We recommend to test entities, repositories and controllers as well.
-4. Document with Swagger: Make sure to annotate your API endpoints and generate a Swagger UI for easier testing and documentation.
-5. `README` file should sufficiently describe the project, as well as the deployment, link to frontend github.
-6. Frontend, backend, and database servers need to be available in the live servers.  
+| Library                       | Function                                                                     | Version |
+| ----------------------------- | ---------------------------------------------------------------------------- | ------- |
+| AutoMapper                    | Automates mapping of data entities to DTOs, reducing manual coding           | 12.0.1  |
+| Microsoft.AspNetCore.Identity | Manages user authentication, security, password hashing, and role management | 6.0.0   |
+| JWT Bearer Authentication     | Implements token-based authentication for securing API endpoints             | 7.5.1   |
+| xUnit                         | Framework for unit testing, ensuring components work correctly in isolation  | 2.4.1   |
+| Moq                           | Mocking library used with xUnit to simulate dependencies during testing      | 4.16.1  |
 
 ## Getting Started
 
-1. Start with backend first before moving to frontend.
-2. In the backend, here is the recommended order:
+### Prerequisites
 
-   - Plan Your Database Schema before start coding
+Before you begin, ensure you have the following prerequisites installed on your development environment:
 
-   - Set Up the Project Structure
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [PostgreSQL](https://www.postgresql.org/download/)
+- [Visual Studio](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download) (optional but recommended)
 
-   - Build the models
+### Clone the Repository
 
-   - Create the Repositories
+Clone the backend repository to your local machine:
 
-   - Build the Services
-
-   - Set Up Authentication & Authorization
-
-   - Build the Controllers
-
-   - Implement Error Handling Middleware
-
-3. You should focus on the mandatory features first. Make sure you have minimal working project before opting for advanced functionalities.
-
-Testing should be done along the development circle, early and regularly.
-
-## Testing
-
-Unit testing, and optionally integration testing, must be included for both frontend and backend code. Aim for high test coverage and ensure all major functionalities are covered.
+```
+git clone https://github.com/adhanif/fs17_CSharp_FullStack
+cd CSharp_FullStack
+cd Eshop:WebApi
+dotnet restore
+dotnet run
+```
