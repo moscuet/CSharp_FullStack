@@ -125,7 +125,7 @@ app.UseSwaggerUI(c =>
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseCors("AllowAll"); 
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
