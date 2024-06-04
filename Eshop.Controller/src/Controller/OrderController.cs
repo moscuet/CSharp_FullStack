@@ -53,11 +53,17 @@ namespace Eshop.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<OrderReadDTO>>> GetAllUserOrders(Guid? userId, [FromQuery] QueryOptions options)
         {
+            
+         
             var (currentUserId, currentUserRole) = UserContextHelper.GetUserClaims(HttpContext);
 
-            if (userId.HasValue && currentUserRole != "Admin")
-                return Forbid();
+          Console.WriteLine($"currentUserId: {currentUserId}");
+         Console.WriteLine($"currentUserRole: {currentUserRole}");
 
+            if (userId.HasValue && currentUserRole != "Admin"){
+                Console.WriteLine("User is not an Admin, so he can only see his own orders");
+             return Forbid();
+            }
             Guid fetchUserId = (Guid)(userId ?? currentUserId);
 
             var orders = await _orderService.GetAllUserOrdersAsync(fetchUserId, options);
