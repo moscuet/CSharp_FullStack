@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Eshop.Core.src.Common;
 using Eshop.Service.src.DTO;
@@ -67,6 +68,8 @@ namespace Eshop.WebApi.Controllers
             Guid fetchUserId = (Guid)(userId ?? currentUserId);
 
             var orders = await _orderService.GetAllUserOrdersAsync(fetchUserId, options);
+            Console.WriteLine(JsonSerializer.Serialize(orders));
+            
             return Ok(_mapper.Map<IEnumerable<OrderReadDTO>>(orders));
         }
 
