@@ -55,9 +55,8 @@ namespace Eshop.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<OrderReadDTO>>> GetAllUserOrders(Guid? userId, [FromQuery] QueryOptions options)
         {
             
-         
             var (currentUserId, currentUserRole) = UserContextHelper.GetUserClaims(HttpContext);
-
+            
           Console.WriteLine($"currentUserId: {currentUserId}");
          Console.WriteLine($"currentUserRole: {currentUserRole}");
 
@@ -68,8 +67,9 @@ namespace Eshop.WebApi.Controllers
             Guid fetchUserId = (Guid)(userId ?? currentUserId);
 
             var orders = await _orderService.GetAllUserOrdersAsync(fetchUserId, options);
+           
             Console.WriteLine(JsonSerializer.Serialize(orders));
-            
+
             return Ok(_mapper.Map<IEnumerable<OrderReadDTO>>(orders));
         }
 
