@@ -24,7 +24,6 @@ namespace Eshop.WebApi.src.Repo
 
         public async Task<Product> CreateAsync(Product product)
         {
-            Console.WriteLine("I am here in repo1");
             await _products.AddAsync(product);
             await _context.SaveChangesAsync();
             return product;
@@ -32,8 +31,6 @@ namespace Eshop.WebApi.src.Repo
 
         public async Task<Product> CreateWithImagesAsync(Product product, List<string> imageUrls)
         {
-
-            Console.WriteLine("I am here in repo");
 
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -126,6 +123,7 @@ namespace Eshop.WebApi.src.Repo
 
             var sql = $@"SELECT product_id AS id  FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryId})";
             var productIds = await _products.FromSqlRaw(sql).Select(p => p.Id).ToListAsync();
+             Console.WriteLine($"From controller: reviewcraeted: {JsonSerializer.Serialize(sql)}\n");
 
             var products = await _products
                 .Where(p => productIds.Contains(p.Id))

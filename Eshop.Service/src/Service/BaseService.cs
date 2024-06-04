@@ -49,13 +49,9 @@ namespace Eshop.Service.src.Service
             {
                 throw new KeyNotFoundException($"Entity with ID {id} not found.");
             }
-
-
             var mappedEntity = _mapper.Map<TReadDTO>(entity);
 
-
-            Console.WriteLine($"From controller: reviewcraeted: {JsonSerializer.Serialize(mappedEntity)}\n");
-
+            // Console.WriteLine($"From controller: reviewcraeted: {JsonSerializer.Serialize(mappedEntity)}\n");
 
             return mappedEntity;
         }
