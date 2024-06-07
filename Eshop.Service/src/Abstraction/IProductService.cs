@@ -8,5 +8,6 @@ namespace Eshop.Service.src.ServiceAbstraction
     {
         Task<IEnumerable<ProductReadDTO>> GetAllProductsAsync(QueryOptions? options);
         Task<Product> ProductCreateAsync(ProductCreateDTO productCreateDto);
+        Task<Product> UpdateProductWithImagesAsync(Guid id, ProductUpdateDTO productUpdateDto);
     }
 }

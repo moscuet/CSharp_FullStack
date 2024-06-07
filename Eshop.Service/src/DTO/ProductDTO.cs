@@ -34,4 +34,5 @@ public class ProductUpdateDTO
     public Guid? ProductSizeId { get; set; }
     public Guid? ProductColorId { get; set; }
     public int? Inventory { get; set; }
+    public List<string> ImageUrls { get; set; } = new List<string>(); 
 }

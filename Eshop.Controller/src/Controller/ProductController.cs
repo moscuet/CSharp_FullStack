@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.Entity;
 using Eshop.Service.src.DTO;
@@ -52,13 +53,12 @@ namespace Eshop.Controller.src.Controllers
         // PUT: Update a product
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] ProductUpdateDTO productDto)
+       
+        public async  Task<ActionResult<Product>> UpdateAsync(Guid id, [FromBody] ProductUpdateDTO productDto)
         {
-            var updateResult = await _productService.UpdateAsync(id, productDto);
-            if (!updateResult)
-                return NotFound();
-
-            return NoContent();
+            //   Console.WriteLine(JsonSerializer.Serialize(productDto));
+            var updateResult = await _productService.UpdateProductWithImagesAsync(id, productDto);
+            return updateResult;
         }
 
         // DELETE: Delete a product

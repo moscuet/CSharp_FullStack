@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.Entity;
@@ -30,5 +31,29 @@ namespace Eshop.Service.src.Service
             var products = await _productRepository.GetAllProductsAsync(options);
             return _mapper.Map<IEnumerable<ProductReadDTO>>(products);
         }
+
+        public async Task<Product> UpdateProductWithImagesAsync(Guid id, ProductUpdateDTO productUpdateDto)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(productUpdateDto));
+
+                Console.WriteLine("");
+
+            var existingProduct = await _productRepository.GetByIdAsync(id);
+                Console.WriteLine(JsonSerializer.Serialize(existingProduct));
+
+            if (existingProduct  == null)
+            {
+                throw new KeyNotFoundException($"Product with ID {id} not found.");
+            }
+                Console.WriteLine("");
+
+            _mapper.Map(productUpdateDto, existingProduct);
+            Console.WriteLine(JsonSerializer.Serialize(existingProduct));
+
+            // var product = _mapper.Map<Product>(productUpdateDto);
+            var updatedProduct = await _productRepository.UpdateWithImageAsync(existingProduct, productUpdateDto.ImageUrls);
+            return updatedProduct;
+        }
+
     }
 }

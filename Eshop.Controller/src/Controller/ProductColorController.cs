@@ -17,7 +17,7 @@ namespace Eshop.Controller.src.Controllers
         }
 
         // POST: Create a new product color
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ProductColorReadDTO>> CreateAsync([FromBody] ProductColorCreateDTO productColorDto)
         {

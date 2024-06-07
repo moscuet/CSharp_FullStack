@@ -31,6 +31,7 @@ namespace Eshop.WebApi.src.Repo
 
         public async Task<Product> CreateWithImagesAsync(Product product, List<string> imageUrls)
         {
+            Console.WriteLine($"imageUrls: {JsonSerializer.Serialize(product)}");
 
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -70,18 +71,47 @@ namespace Eshop.WebApi.src.Repo
             }
         }
 
-        public async Task<bool> UpdateAsync(Product product)
-        {
-            var existingProduct = await _products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == product.Id);
-            if (existingProduct == null)
-            {
-                throw new KeyNotFoundException($"Product with ID {product.Id} not found.");
-            }
-            _context.Update(product);
 
-            await _context.SaveChangesAsync();
-            return true;
+        // public async Task<Product> UpdateWithImageAsync(Product product,List<string> imageUrls)
+        // {
+        //     _context.Update(product);
+        //     await _context.SaveChangesAsync();
+        //     return product;
+        // }
+
+
+        public async Task<Product> UpdateWithImageAsync(Product product, List<string> imageUrls)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                _products.Update(product);
+                await _context.SaveChangesAsync();
+
+                if (imageUrls != null && imageUrls.Count > 0)
+                {
+                    var existingImages = _images.Where(img => img.ProductId == product.Id);
+                    _images.RemoveRange(existingImages);
+
+                    foreach (var url in imageUrls)
+                    {
+                        _images.Add(new ProductImage { ProductId = product.Id, Url = url });
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
+                await transaction.CommitAsync();
+                return product;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception("An error occurred while updating the product with images.", ex);
+            }
         }
+
 
         public async Task<Product> GetByIdAsync(Guid id)
         {
@@ -140,6 +170,11 @@ namespace Eshop.WebApi.src.Repo
                 .ToListAsync();
             var orderedProducts = productIds.Select(id => products.First(p => p.Id == id)).ToList();
             return orderedProducts;
+        }
+
+        public Task<bool> UpdateAsync(Product entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

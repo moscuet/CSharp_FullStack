@@ -17,7 +17,7 @@ namespace Eshop.Controller.src.Controllers
         }
 
         // POST: Create a new product size
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ProductSizeReadDTO>> CreateAsync([FromBody] ProductSizeCreateDTO productSizeDto)
         {
