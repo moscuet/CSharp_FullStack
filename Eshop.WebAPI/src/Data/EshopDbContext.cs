@@ -346,7 +346,6 @@ namespace Eshop.WebApi.src.Data
                               {
                                     var script = await File.ReadAllTextAsync(scriptFile);
                                     await Database.ExecuteSqlRawAsync(script);
-                                    Console.WriteLine($"Successfully executed script: {scriptFile}");
                               }
                               catch (Exception ex)
                               {

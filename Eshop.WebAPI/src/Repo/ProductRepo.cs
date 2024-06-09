@@ -2,6 +2,7 @@ using System.Text.Json;
 using Eshop.Core.src.Common;
 using Eshop.Core.src.Entity;
 using Eshop.Core.src.RepositoryAbstraction;
+using Eshop.Service.src.DTO;
 using Eshop.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -72,12 +73,7 @@ namespace Eshop.WebApi.src.Repo
         }
 
 
-        // public async Task<Product> UpdateWithImageAsync(Product product,List<string> imageUrls)
-        // {
-        //     _context.Update(product);
-        //     await _context.SaveChangesAsync();
-        //     return product;
-        // }
+
 
 
         public async Task<Product> UpdateWithImageAsync(Product product, List<string> imageUrls)
@@ -142,35 +138,37 @@ namespace Eshop.WebApi.src.Repo
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options)
-        {
-            var limit = options.Limit.HasValue ? options.Limit.Value.ToString() : "NULL";
-            var offset = options.StartingAfter.HasValue ? options.StartingAfter.Value.ToString() : "NULL";
-            var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
-            var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder}'";
-            var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
-            var categoryId = string.IsNullOrWhiteSpace(options.CategoryId) ? "NULL" : $"'{options.CategoryId}'";
-          
-            var priceRange = string.IsNullOrWhiteSpace(options.PriceRange) ? null : options.PriceRange;
-            var prices = priceRange?.Split(new string[] { "," }, StringSplitOptions.None) ?? new string[] { "NULL", "NULL" };
-            var minPrice = prices.Length > 0 && int.TryParse(prices[0], out var min) ? min.ToString() : "NULL";
-            var maxPrice = prices.Length > 1 && int.TryParse(prices[1], out var max) ? max.ToString() : "NULL";
+public async Task<(IEnumerable<Product> Products, int TotalPageNumber)> GetAllProductsAsync(QueryOptions options)
+{
+    var limit = options.Limit.HasValue ? options.Limit.Value : 50; 
+    var offset = options.StartingAfter.HasValue ? options.StartingAfter.Value : 0;
+    var sortBy = string.IsNullOrWhiteSpace(options.SortBy?.ToString()) ? "NULL" : $"'{options.SortBy.ToString()}'";
+    var sortOrder = string.IsNullOrWhiteSpace(options.SortOrder?.ToString()) ? "NULL" : $"'{options.SortOrder}'";
+    var searchKey = string.IsNullOrWhiteSpace(options.SearchKey) ? "NULL" : $"'{options.SearchKey}'";
+    var categoryId = string.IsNullOrWhiteSpace(options.CategoryId) ? "NULL" : $"'{options.CategoryId}'";
+    
+    var priceRange = string.IsNullOrWhiteSpace(options.PriceRange) ? null : options.PriceRange;
+    var prices = priceRange?.Split(new string[] { "," }, StringSplitOptions.None) ?? new string[] { "NULL", "NULL" };
+    var minPrice = prices.Length > 0 && int.TryParse(prices[0], out var min) ? min.ToString() : "NULL";
+    var maxPrice = prices.Length > 1 && int.TryParse(prices[1], out var max) ? max.ToString() : "NULL";
 
+    var sql = $@"SELECT product_id AS id FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryId}, {minPrice}, {maxPrice})";
+    var productIds = await _products.FromSqlRaw(sql).Select(p => p.Id).ToListAsync();
+    
+    var products = await _products
+        .Where(p => productIds.Contains(p.Id))
+        .Include(p => p.ProductLine)
+            .ThenInclude(pl => pl.Category)
+        .Include(p => p.ProductSize)
+        .Include(p => p.ProductColor)
+        .Include(p => p.ProductImages)
+        .ToListAsync();
+    
+    var orderedProducts = productIds.Select(id => products.First(p => p.Id == id)).ToList();
 
-            var sql = $@"SELECT product_id AS id FROM get_products({limit}, {offset}, {sortBy}, {sortOrder}, {searchKey}, {categoryId}, {minPrice}, {maxPrice})";
-            var productIds = await _products.FromSqlRaw(sql).Select(p => p.Id).ToListAsync();
-
-            var products = await _products
-                .Where(p => productIds.Contains(p.Id))
-                .Include(p => p.ProductLine)
-                    .ThenInclude(pl => pl.Category)
-                .Include(p => p.ProductSize)
-                .Include(p => p.ProductColor)
-                .Include(p => p.ProductImages)
-                .ToListAsync();
-            var orderedProducts = productIds.Select(id => products.First(p => p.Id == id)).ToList();
-            return orderedProducts;
-        }
+    Console.WriteLine(JsonSerializer.Serialize(orderedProducts));
+   return (orderedProducts, 1);
+    }
 
         public Task<bool> UpdateAsync(Product entity)
         {

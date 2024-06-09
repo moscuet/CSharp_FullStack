@@ -7,6 +7,6 @@ namespace Eshop.Core.src.RepositoryAbstraction
     {
         Task<Product> CreateWithImagesAsync(Product product, List<string> imageUrls);
         Task<Product> UpdateWithImageAsync( Product product, List<string> imageUrls);
-        Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options);
+        Task<(IEnumerable<Product> Products, int TotalPageNumber)> GetAllProductsAsync(QueryOptions options);
     }
 }

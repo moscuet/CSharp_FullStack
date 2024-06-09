@@ -37,5 +37,10 @@ namespace Eshop.Core.src.Entity
         public string ProductColorValue => ProductColor?.Value;
         public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+
+        public static explicit operator int(Product v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

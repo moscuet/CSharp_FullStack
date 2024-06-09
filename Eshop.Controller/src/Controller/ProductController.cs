@@ -56,7 +56,6 @@ namespace Eshop.Controller.src.Controllers
        
         public async  Task<ActionResult<Product>> UpdateAsync(Guid id, [FromBody] ProductUpdateDTO productDto)
         {
-            //   Console.WriteLine(JsonSerializer.Serialize(productDto));
             var updateResult = await _productService.UpdateProductWithImagesAsync(id, productDto);
             return updateResult;
         }

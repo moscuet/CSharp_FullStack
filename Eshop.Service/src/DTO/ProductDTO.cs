@@ -36,3 +36,11 @@ public class ProductUpdateDTO
     public int? Inventory { get; set; }
     public List<string> ImageUrls { get; set; } = new List<string>(); 
 }
+
+
+public class ProductQueryReadDTO
+{
+    public IEnumerable<ProductReadDTO> Products { get; set; }
+    public int CurrentPage { get; set; }
+    public int TotalPages { get; set; }
+}
