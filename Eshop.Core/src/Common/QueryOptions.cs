@@ -5,7 +5,7 @@ namespace Eshop.Core.src.Common
 {
     public class QueryOptions
     {
-        public int? Limit { get; set; } = 20;
+        public int? Limit { get; set; } = 50;
         public int? StartingAfter { get; set; }=0;
         public SortBy? SortBy { get; set; }
         public SortOrder? SortOrder { get; set; }
